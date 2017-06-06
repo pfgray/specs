@@ -1,0 +1,97 @@
+
+@import '~styles/colors.less';
+
+body {
+  background-color: @dark-primary;
+  color: @lightest-gray;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+button.btn-primary {
+  background-color: @color-primary;
+  border-color: @color-primary;
+  cursor: pointer;
+  &:hover,&:active,&:focus {
+    background-color: darken(@color-primary, 10%);
+  }
+}
+
+.card {
+  border:none;
+  padding: 1em;
+  background-color: #eee;
+  background-color: @color-primary;
+  background-color: @dark-primary;
+  color: @dark-primary;
+  // border-color: #aaa;
+  color: #eee;
+  margin-top: 1em;
+  &:last-child {
+    margin-bottom: 5em;
+  }
+
+  h5, input {
+    font-size: 14px;
+  }
+  input {
+    margin-bottom: 6px;
+  }
+}
+h5.card-title {
+  * > {
+    vertical-align: middle;
+  }
+  select {
+    margin-left: 1em;
+  }
+}
+
+input.form-control {
+  &, &:active, &:focus {
+    background-color: @dark-primary;
+    // background-color: white;
+    border: none;
+    border-radius: 0;
+
+    .input-accent(@color-primary);
+
+
+    &::placeholder {
+      color: @dark-gray;
+      font-style: oblique;
+    }
+  }
+
+  padding: 0.25em;
+  margin-bottom: 1em;
+}
+
+.card.tertiary {
+  input.form-control {
+    &, &:active, &:focus {
+      .input-accent(@color-tertiary);
+    }
+  }
+}
+
+.card.quarternary {
+  input.form-control {
+    &, &:active, &:focus {
+      .input-accent(@color-quarternary);
+    }
+  }
+}
+
+.input-accent(@color) {
+  color: @color;
+  border-bottom: 2px solid @color;
+}
+
+.checkbox-wrapper {
+  input[type=checkbox] {
+    margin: 0;
+  }
+  > * {
+    vertical-align: middle;
+  }
+}

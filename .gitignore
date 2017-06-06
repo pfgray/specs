@@ -1,0 +1,7 @@
+node_modules/
+.idea/
+.lib/
+target/
+project/target/
+project/project/
+sbt
