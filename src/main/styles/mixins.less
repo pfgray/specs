@@ -1,0 +1,13 @@
+
+.input-accent(@color) {
+  color: @color;
+  border-color: @color;
+}
+
+.card-with-input(@color) {
+  input.form-control, textarea.form-control {
+    &, &:active, &:focus {
+      .input-accent(@color);
+    }
+  }
+}

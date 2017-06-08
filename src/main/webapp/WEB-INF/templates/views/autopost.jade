@@ -1,0 +1,56 @@
+-@ val signedParams: Map[String, String]
+-@ val url: String
+-@ val debug: Boolean
+
+!!!
+head
+  meta(http-equiv="Content-Type" content="text/html; charset=UTF-8")
+  meta(name="viewport" content="width=device-width, initial-scale=1.0")
+  meta(name="google" content="notranslate")
+  meta(http-equiv="Content-Language" content="en")
+  base(href="/")
+
+  title Lti Launch
+
+  - if(debug)
+    style
+      | body { background: #2B3A42; }
+      | .form-value {
+      | }
+      | .form-value div {
+      |   display: inline-block;
+      |   width: 50%;
+      |   padding: 0.15em 0.25em;
+      | }
+      | .form-value div:first-child {
+      |   color: #62B1D8;
+      |   text-align: right;
+      | }
+      | .form-value div:nth-child(2) {
+      |   color: #4db277;
+      | }
+      | .center {
+      |   text-align: center;
+      |   margin: 2em 0;
+      | }
+
+body
+  div.row
+    div.container.main
+      form#autosubmit(action={url} method="POST")
+        div.center
+          button.btn.btn-primary continue
+        - for (param <- signedParams)
+          - if(debug)
+            div.form-value
+              div.key> #{param._1}
+              div.value> #{param._2}
+          input.form-control(type="hidden" name={param._1} value={param._2} disabled)
+        div.center
+          button.btn.btn-primary continue
+
+  - if(debug)
+    script(src="/assets/main.js")
+  - else
+    script(type="text/javascript")
+      | document.getElementById('autosubmit').submit()

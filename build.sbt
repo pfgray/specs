@@ -29,6 +29,10 @@ libraryDependencies ++= Seq(
   "org.apache.httpcomponents" % "httpclient" % "4.5.3",
   "commons-io" % "commons-io" % "2.5",
 
+  "net.oauth.core" % "oauth" % "20100527",
+  "oauth.signpost" % "signpost-core" % "1.2.1.2",
+  "oauth.signpost" % "signpost-commonshttp4" % "1.2.1.2",
+
   "ch.qos.logback" % "logback-classic" % "1.1.5" % "runtime",
   "org.eclipse.jetty" % "jetty-webapp" % "9.2.15.v20160210" % "container",
   "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided"

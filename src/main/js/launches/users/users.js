@@ -4,54 +4,56 @@ import ron from 'file-loader!./ron.jpg';
 import severus from 'file-loader!./severus.jpg';
 import albus from 'file-loader!./albus.jpg';
 
+const asset = a => `${window.web_origin}/assets/${a}`;
+
 export default [{
   label: 'Harry Potter',
   name: 'harry',
-  image: harry,
-  fullName: 'Harry Potter',
+  user_image: asset(harry),
+  lis_person_name_full: 'Harry Potter',
   roles: 'Learner',
-  id: 'ccbd7af7-8777-412e-8844-7255fd3bbc7f',
-  email: 'hpotter@hogwarts.edu',
-  givenName: 'Harry',
-  familyName: 'Potter'
+  user_id: 'ccbd7af7-8777-412e-8844-7255fd3bbc7f',
+  lis_person_contact_email_primary: 'hpotter@hogwarts.edu',
+  lis_person_name_given: 'Harry',
+  lis_person_name_family: 'Potter'
 },{
   label: 'Hermoine Granger',
   name: 'hermoine',
-  image: hermoine,
-  fullName: 'Hermoine Granger',
+  user_image: asset(hermoine),
+  lis_person_name_full: 'Hermoine Granger',
   roles: 'Learner',
-  id: '6acba3eb-0706-4f5e-aff2-704afa3cd4ce',
-  email: 'hgranger@hogwarts.edu',
-  givenName: 'Hermoine',
-  familyName: 'Granger'
+  user_id: '6acba3eb-0706-4f5e-aff2-704afa3cd4ce',
+  lis_person_contact_email_primary: 'hgranger@hogwarts.edu',
+  lis_person_name_given: 'Hermoine',
+  lis_person_name_family: 'Granger'
 },{
   label: 'Ron Weasley',
   name: 'ron',
-  image: ron,
-  fullName: 'Ron Weasley',
+  user_image: asset(ron),
+  lis_person_name_full: 'Ron Weasley',
   roles: 'Learner',
-  id: 'acdafe48-1d86-4cd6-accf-8e0c781df79d',
-  email: 'rweasley@hogwarts.edu',
-  givenName: 'Ron',
-  familyName: 'Weasley'
+  user_id: 'acdafe48-1d86-4cd6-accf-8e0c781df79d',
+  lis_person_contact_email_primary: 'rweasley@hogwarts.edu',
+  lis_person_name_given: 'Ron',
+  lis_person_name_family: 'Weasley'
 },{
   label: 'Severus Snape',
   name: 'severus',
-  image: severus,
-  fullName: 'Severus Snape',
+  user_image: asset(severus),
+  lis_person_name_full: 'Severus Snape',
   roles: 'Instructor',
-  id: '620b291d-7041-4864-abbf-c6f8564f7752',
-  email: 'ssnape@hogwarts.edu',
-  givenName: 'Severus',
-  familyName: 'Snape'
+  user_id: '620b291d-7041-4864-abbf-c6f8564f7752',
+  lis_person_contact_email_primary: 'ssnape@hogwarts.edu',
+  lis_person_name_given: 'Severus',
+  lis_person_name_family: 'Snape'
 },{
   label: 'Albus Dumbledore',
   name: 'albus',
-  image: albus,
-  fullName: 'Albus DUmbledore',
+  user_image: asset(albus),
+  lis_person_name_full: 'Albus Dumbledore',
   roles: 'urn:lti:sysrole:ims/lis/Administrator',
-  id: '87056e9a-9ba0-463e-b2d8-1576ea7cd467',
-  email: 'adumbledore@hogwarts.edu',
-  givenName: 'Albus',
-  familyName: 'Albus Dumbledore'
+  user_id: '87056e9a-9ba0-463e-b2d8-1576ea7cd467',
+  lis_person_contact_email_primary: 'adumbledore@hogwarts.edu',
+  lis_person_name_given: 'Albus',
+  lis_person_name_family: 'Albus Dumbledore'
 }];

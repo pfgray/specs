@@ -1,5 +1,6 @@
 
 @import '~styles/colors.less';
+@import '~styles/mixins.less';
 
 body {
   background-color: @dark-primary;
@@ -46,11 +47,12 @@ h5.card-title {
   }
 }
 
-input.form-control {
+input.form-control, textarea.form-control {
   &, &:active, &:focus {
+    padding: 0.5em;
+    margin-bottom: 1em;
+    line-height: 1.5em;
     background-color: @dark-primary;
-    // background-color: white;
-    border: none;
     border-radius: 0;
 
     .input-accent(@color-primary);
@@ -66,25 +68,36 @@ input.form-control {
   margin-bottom: 1em;
 }
 
+input.form-control {
+  border:none;
+  border-bottom: 2px;
+  border-bottom-style: solid;
+}
+
+textarea.form-control {
+  border-style: solid;
+  border-width: 2px;
+}
+
 .card.tertiary {
-  input.form-control {
-    &, &:active, &:focus {
-      .input-accent(@color-tertiary);
-    }
-  }
+  .card-with-input(@color-tertiary);
 }
 
 .card.quarternary {
-  input.form-control {
-    &, &:active, &:focus {
-      .input-accent(@color-quarternary);
-    }
-  }
+  .card-with-input(@color-quarternary);
 }
 
-.input-accent(@color) {
-  color: @color;
-  border-bottom: 2px solid @color;
+.card.quinary {
+  .card-with-input(@color-quinary);
+}
+
+.card {
+  margin-top: 0;
+  input.form-control.error {
+    &, &:active, &:focus {
+      .input-accent(@color-error);
+    }
+  }
 }
 
 .checkbox-wrapper {
