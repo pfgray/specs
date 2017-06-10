@@ -27,3 +27,49 @@
     width: ~"calc(100% - 37px - 14px)"
   }
 }
+
+.launch-container {
+  overflow:hidden;
+  width: 100%;
+
+  .launch-container-inner {
+    width: 200%;
+
+    > * {
+      display: inline-block;
+      width: 50%;
+      transition: all 0.5s ease-in-out;
+      vertical-align: top;
+    }
+
+    .launch-frame {
+      > * {
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      button {
+        width: 40px;
+        padding: .5em 0;
+      }
+      iframe {
+        border: none;
+        width: ~"calc(100% - 40px)";
+        height: 35em; // maybe different on mobile?
+        background: white;
+      }
+      //transform: translate3d(100%, 0, 0);
+    }
+
+  }
+
+  &.launched {
+    .launch-frame {
+      transform: translate3d(-100%, 0, 0);
+    }
+    .launch-form {
+      transform: translate3d(-100%, 0, 0);
+    }
+  }
+
+}

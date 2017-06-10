@@ -1,22 +1,20 @@
-import users from './users/users';
-import contexts from './contexts/contexts';
-
-export const UPDATE_FORM = 'UPDATE_FORM';
-
-const initialUser = users[0];
-const initialContext = contexts[0];
+export const LAUNCH_IN_FRAME = 'LAUNCH_IN_FRAME';
+export const UNLAUNCH = 'UNLAUNCH';
 
 const initialState = {
-  ...initialUser,
-  ...initialContext
+  launched: false
 };
 
 export const launchReducer = (state = initialState, action) => {
   switch(action.type){
-    case UPDATE_FORM:
+    case LAUNCH_IN_FRAME:
       return {
-        ...state,
-        ...action.data
+        launched: true,
+        params: action.data
+      };
+    case UNLAUNCH:
+      return {
+        launched: false
       };
     default:
       return state;

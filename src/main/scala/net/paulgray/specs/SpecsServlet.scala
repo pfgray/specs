@@ -26,7 +26,7 @@ class SpecsServlet extends SpecsStack {
     val key = params.getOrElse("key", "")
     val secret = params.getOrElse("secret", "")
 
-    val nonLaunchParams = Seq("key", "secret", "url")
+    val nonLaunchParams = Seq("key", "secret", "url", "outcomes1", "outcomes2", "debug")
     val unsignedParams =
       params.filterKeys(s => !nonLaunchParams.contains(s)).toList.map {
         case (a, b) => new SimpleEntry[String, String](a, b)
