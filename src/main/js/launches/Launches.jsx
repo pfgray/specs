@@ -1,17 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import { Modal } from 'reactstrap';
 import classNames from 'classnames';
 import _ from 'lodash';
+import AccessTime from 'material-ui-icons/AccessTime';
+import Lockr from 'Lockr';
 
+import PrevLaunches from './PrevLaunches';
 import users from './users/users';
 import contexts from './contexts/contexts';
-import { LAUNCH_IN_FRAME, UNLAUNCH } from './launchReducer';
+import { LAUNCH_IN_FRAME, UNLAUNCH, OPEN_PREVIOUS, CLOSE_PREVIOUS, ADD_LAUNCH, REMOVE_LAUNCH } from './launchReducer';
 
 import './launches.less';
 
-const save = dispatch => values => {
-  console.log('submiting, got values: ', values);
+const save = (dispatch) => values => {
   const newWindow = values.newWindow;
 
   const customParams =
@@ -23,18 +26,29 @@ const save = dispatch => values => {
     ...values,
     ...customParams
   };
+  // Lockr
+  dispatch((d, getState) => {
+    console.log(' adding launching...');
+    d({
+      type: ADD_LAUNCH,
+      data: {
+        url: values.url,
+        key: values.key,
+        secret: values.secret
+      }
+    });
+    Lockr.set('launches', getState().launchForm.launches);
+  });
 
   const params = Object.keys(values).map(k => k + "=" + values[k]).join("&");
   if(newWindow){
     window.open('/api/signedLaunch?' + params);
   } else {
-    console.log('dispatching?')
     dispatch({
       type: LAUNCH_IN_FRAME,
       data: params
     });
   }
-
 };
 
 const mapStateToProps = state => ({
@@ -47,11 +61,16 @@ const mapStateToProps = state => ({
     outcomes2: true
   },
   launched: state.launchForm ? state.launchForm.launched : false,
-  params: state.launchForm ? state.launchForm.params : {}
+  params: state.launchForm ? state.launchForm.params : {},
+  previousOpen: state.launchForm.previousOpen,
+  launches: state.launchForm.launches
 });
 const mapDispatchToProps = dispatch => ({
   save: save(dispatch),
-  unLaunch: () => dispatch({type: UNLAUNCH})
+  unLaunch: () => dispatch({type: UNLAUNCH}),
+  openPrevious: () => dispatch({type: OPEN_PREVIOUS}),
+  closePrevious: () => dispatch({type: CLOSE_PREVIOUS}),
+  removeLaunch: i => dispatch({type: REMOVE_LAUNCH, data: {index: i}})
 });
 
 const updateUser = dispatch => e => {
@@ -76,14 +95,23 @@ const TextInput = ({placeholder, input, meta}) => {
   );
 };
 
-const Launches = ({save, handleSubmit, launched, change, user_image, params, unLaunch}) => (
+const Launches = ({save, handleSubmit, launched, change, user_image, params, unLaunch, openPrevious, previousOpen, closePrevious, launches, removeLaunch}) => (
   <div className={'launch-container ' + (launched ? 'launched' : '')}>
     <div className='launch-container-inner'>
       <form className="launch-form" onSubmit={handleSubmit(save)}>
         <div className="row launch-btn-container">
           <div className="col-md-12">
-            <button className="btn btn-primary">Launch</button>
-            <label className="new-window-label checkbox-wrapper"><Field name="newWindow" component="input" type="checkbox" /><span> New Window</span></label>
+            {launches.length > 0 ? (
+              <div>
+                <PrevLaunches isOpen={previousOpen} onClose={closePrevious} launches={launches} removeLaunch={removeLaunch}/>
+                <button className="btn btn-warning" onClick={openPrevious} type='button'><AccessTime className="sm" /></button>
+              </div>
+            ): null}
+
+            <div className="fill right">
+              <button className="btn btn-primary">Launch</button>
+              <label className="new-window-label checkbox-wrapper"><Field name="newWindow" component="input" type="checkbox" /><span>New Window</span></label>
+            </div>
           </div>
         </div>
 
