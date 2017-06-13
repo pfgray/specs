@@ -4,7 +4,9 @@ import { Field, reduxForm } from 'redux-form';
 import { Modal } from 'reactstrap';
 import classNames from 'classnames';
 import _ from 'lodash';
-import AccessTime from 'material-ui-icons/AccessTime';
+import History from 'material-ui-icons/History';
+import Launch from 'material-ui-icons/Launch';
+import CallMade from 'material-ui-icons/CallMade';
 import Lockr from 'Lockr';
 
 import PrevLaunches from './PrevLaunches';
@@ -70,12 +72,21 @@ const mapDispatchToProps = dispatch => ({
   unLaunch: () => dispatch({type: UNLAUNCH}),
   openPrevious: () => dispatch({type: OPEN_PREVIOUS}),
   closePrevious: () => dispatch({type: CLOSE_PREVIOUS}),
-  removeLaunch: i => dispatch({type: REMOVE_LAUNCH, data: {index: i}})
+  removeLaunch: i => dispatch((d, getState) => {
+    d({type: REMOVE_LAUNCH, data: {index: i}});
+    Lockr.set('launches', getState().launchForm.launches);
+  }),
+  dispatch
 });
 
-const updateUser = dispatch => e => {
+const updateLaunch = (change, dispatch) => newLaunch => {
+  changeAll(change, newLaunch);
+  dispatch({type: CLOSE_PREVIOUS});
+}
+
+const updateUser = change => e => {
   const newUser = users.find(u => u.name === e.target.value);
-  changeAll(dispatch, newUser);
+  changeAll(change, newUser);
 }
 
 const changeAll = (change, obj) => {
@@ -95,16 +106,16 @@ const TextInput = ({placeholder, input, meta}) => {
   );
 };
 
-const Launches = ({save, handleSubmit, launched, change, user_image, params, unLaunch, openPrevious, previousOpen, closePrevious, launches, removeLaunch}) => (
+const Launches = ({save, handleSubmit, launched, change, user_image, params, unLaunch, openPrevious, previousOpen, closePrevious, launches, removeLaunch, dispatch}) => (
   <div className={'launch-container ' + (launched ? 'launched' : '')}>
     <div className='launch-container-inner'>
       <form className="launch-form" onSubmit={handleSubmit(save)}>
         <div className="row launch-btn-container">
           <div className="col-md-12">
+            <PrevLaunches isOpen={previousOpen} onClose={closePrevious} launches={launches} removeLaunch={removeLaunch} loadLaunch={updateLaunch(change, dispatch)}/>
             {launches.length > 0 ? (
               <div>
-                <PrevLaunches isOpen={previousOpen} onClose={closePrevious} launches={launches} removeLaunch={removeLaunch}/>
-                <button className="btn btn-warning" onClick={openPrevious} type='button'><AccessTime className="sm" /></button>
+                <button className="btn btn-warning" onClick={openPrevious} type='button'><History className="sm" /></button>
               </div>
             ): null}
 

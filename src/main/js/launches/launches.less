@@ -6,6 +6,10 @@
 }
 .new-window-label {
   margin: 0 0 0 1em;
+
+  input[type=checkbox] {
+    margin-right: 0.5em;
+  }
 }
 
 .launch-btn-container > div {
@@ -85,6 +89,7 @@
 }
 
 .modal {
+  color: @dark-primary;
   .modal-dialog {
     height: 100%;
     margin: 0 auto;
@@ -93,6 +98,53 @@
 
     .modal-content {
       height: 100%;
+    }
+  }
+}
+
+.previous-launch {
+  padding-top: 1rem;
+  margin-top: 1em;
+  border-top: 1px solid #eee;
+  &:first-child {
+    margin-top:0;
+    border-top: none;
+  }
+
+  display: flex;
+  flex-direction: row;
+
+  .launch-info {
+    flex-grow: 1;
+
+    div {
+      span {
+        display: inline-block;
+        width: 70%;
+        &:first-child {
+          text-align: right;
+          width: 30%;
+          font-weight: bold;
+          padding-right: 1em;
+        }
+      }
+    }
+  }
+  .launch-option {
+    display: flex;
+    align-items: center;
+    padding: 0 1em;
+    cursor: pointer;
+
+    &:hover, &:focus, &:active {
+      color: @color-primary;
+    }
+
+    svg {
+      margin-left: 0.5rem;
+      &:only-child {
+        margin: 0;
+      }
     }
   }
 }

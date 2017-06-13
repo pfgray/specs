@@ -42,8 +42,8 @@ export const launchReducer = (state = initialState, action) => {
     case REMOVE_LAUNCH:
       return merge({
         launches: [
-          ...state.launches.slice(0, data.index),
-          ...state.launches.slice(data.index, state.launches.length),
+          ...state.launches.slice(0, action.data.index),
+          ...state.launches.slice(action.data.index + 1, state.launches.length),
         ]
       });
     default:
