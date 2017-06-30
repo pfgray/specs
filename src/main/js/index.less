@@ -110,3 +110,38 @@ textarea.form-control {
 }
 
 button:focus {outline:0 !important; box-shadow: none !important;}
+
+.modal-content {
+  color: @dark-primary;
+  .modal-body{
+    overflow: hidden;
+    overflow-y: auto;
+  }
+}
+
+svg.sm {
+  height: 1.25em;
+  width: 1.25em;
+}
+button {
+  cursor: pointer;
+}
+
+html, body, #main, #main > div {
+  height: 100%;
+}
+#main {
+  > div {
+    display: flex;
+    flex-direction: column;
+
+    .main-container {
+      flex-grow: 1;
+    }
+  }
+}
+
+.fill {
+  display: flex;
+  flex-grow: 1;
+}
