@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 
 import './header.less';
 import icon from './specs_tex.png';
+import { Button } from 'reactstrap';
 
 const Header = ({children}) => (
   <div>
@@ -15,11 +16,12 @@ const Header = ({children}) => (
             <li><Link to="/registration" activeClassName="active">Registration</Link></li>
             <li><Link to="/commander" activeClassName="active">Commander</Link></li>
           </ul>
+          <div><Link to="/login" role="button" className="btn btn-warning">Sign up/in</Link></div>
         </nav>
       </div>
     </div>
 
-    <div className="container">
+    <div className="container main-container">
       {children}
     </div>
   </div>

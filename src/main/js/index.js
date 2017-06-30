@@ -12,6 +12,7 @@ import Header from './header/Header';
 import Launches from './launches/Launches';
 import Commander from './commander/Commander';
 import Registration from './registration/Registration';
+import Login from './auth/Login';
 
 // const reducers = require.context('./', true, new RegExp('*Reducer\.js$'));
 
@@ -47,6 +48,7 @@ ReactDOM.render(
           <Route path="/" component={Launches} />
           <Route path="/registration" component={Registration} />
           <Route path="/commander" component={Commander} />
+          <Route path="/login" component={Login} />
         </Route>
       </Router>
     </MuiThemeProvider>
