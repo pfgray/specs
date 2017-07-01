@@ -6,7 +6,7 @@ import Send from 'material-ui-icons/Send';
 
 // todo: would be cool to have each launch hash to an icon/color
 
-const Header = ({launches, isOpen, onClose, removeLaunch, loadLaunch}) => (
+const PrevLaunches = ({launches, isOpen, onClose, removeLaunch, loadLaunch}) => (
   <Modal isOpen={isOpen} onHide={alert} toggle={onClose} size="lg" className="previous-launches">
     <ModalHeader toggle={onClose}>
       Previous Launches
@@ -30,4 +30,4 @@ const Header = ({launches, isOpen, onClose, removeLaunch, loadLaunch}) => (
   </Modal>
 );
 
-export default Header;
+export default PrevLaunches;

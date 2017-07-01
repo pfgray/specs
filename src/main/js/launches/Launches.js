@@ -12,7 +12,7 @@ import Lockr from 'Lockr';
 import PrevLaunches from './PrevLaunches';
 import users from './users/users';
 import contexts from './contexts/contexts';
-import { LAUNCH_IN_FRAME, UNLAUNCH, OPEN_PREVIOUS, CLOSE_PREVIOUS, ADD_LAUNCH, REMOVE_LAUNCH } from './launchReducer';
+import { LAUNCH_IN_FRAME, UNLAUNCH, OPEN_PREVIOUS, CLOSE_PREVIOUS, ADD_LAUNCH, REMOVE_LAUNCH, UPDATE_LAUNCH_FORM } from './launchReducer';
 
 import './launches.less';
 
@@ -60,7 +60,8 @@ const mapStateToProps = state => ({
     ...contexts[0],
     newWindow: false,
     outcomes1: true,
-    outcomes2: true
+    outcomes2: true,
+    ...state.launchForm.values
   },
   launched: state.launchForm ? state.launchForm.launched : false,
   params: state.launchForm ? state.launchForm.params : {},
@@ -233,7 +234,13 @@ const validate = values => {
 
 const WrappedForm = reduxForm({
   form: 'launches',
-  validate
+  validate,
+  onChange: (values, dispatch) => {
+    dispatch({
+      type: UPDATE_LAUNCH_FORM,
+      data: values
+    });
+  }
 })(Launches);
 
 export default connect(mapStateToProps, mapDispatchToProps)(WrappedForm);

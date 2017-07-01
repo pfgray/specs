@@ -5,10 +5,12 @@ export const OPEN_PREVIOUS = 'OPEN_PREVIOUS';
 export const CLOSE_PREVIOUS = 'CLOSE_PREVIOUS';
 export const ADD_LAUNCH = 'ADD_LAUNCH';
 export const REMOVE_LAUNCH = 'REMOVE_LAUNCH';
+export const UPDATE_LAUNCH_FORM = 'UPDATE_LAUNCH_FORM';
 
 const initialState = {
   launched: false,
   previousOpen: false,
+  values: {},
   launches: Lockr.get('launches') || []
 };
 
@@ -31,6 +33,10 @@ export const launchReducer = (state = initialState, action) => {
     case CLOSE_PREVIOUS:
       return merge({
         previousOpen: false
+      });
+    case UPDATE_LAUNCH_FORM:
+      return merge({
+        values: action.data
       });
     case ADD_LAUNCH:
       return merge({
