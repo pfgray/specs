@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Launches = () => (
+const Commander = () => (
   <div>Commander, yo</div>
 );
 
-export default Launches;
+export default Commander;

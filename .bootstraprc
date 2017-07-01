@@ -48,53 +48,7 @@ extractStyles: false
 
 
 ### Bootstrap styles
-styles:
-
-  # Mixins
-  mixins: true
-
-  # Reset and dependencies
-  normalize: true
-  print: true
-
-  # Core CSS
-  buttons: true
-  code: true
-  forms: true
-  grid: true
-  images: true
-  reboot: true
-  tables: true
-  type: true
-
-  # Components
-  alert: true
-  badge: true
-  breadcrumb: true
-  button-group: true
-  card: true
-  close: true
-  custom-forms: true
-  dropdown: true
-  input-group: true
-  jumbotron: true
-  list-group: true
-  media: true
-  nav: true
-  navbar: true
-  pagination: true
-  progress: true
-  responsive-embed: true
-  transitions: true
-
-  # Components w/ JavaScript
-  carousel: true
-  modal: true
-  popover: true
-  tooltip: true
-
-  # Utility classes
-  utilities: true
+styles: true
 
 ### Bootstrap scripts
 scripts: false
