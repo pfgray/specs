@@ -2062,6 +2062,10 @@ hoist-non-react-statics@^1.0.0, hoist-non-react-statics@^1.0.3, hoist-non-react-
   version "1.2.0"
   resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
 
+hoist-non-react-statics@^2.3.1:
+  version "2.3.1"
+  resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/hoist-non-react-statics/-/hoist-non-react-statics-2.3.1.tgz#343db84c6018c650778898240135a1420ee22ce0"
+
 home-or-tmp@^2.0.0:
   version "2.0.0"
   resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/home-or-tmp/-/home-or-tmp-2.0.0.tgz#e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
@@ -2691,10 +2695,6 @@ lodash.mergewith@^4.6.0:
   version "4.6.0"
   resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/lodash.mergewith/-/lodash.mergewith-4.6.0.tgz#150cf0a16791f5903b8891eab154609274bdea55"
 
-lodash.omit@^4.4.1:
-  version "4.5.0"
-  resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/lodash.omit/-/lodash.omit-4.5.0.tgz#6eb19ae5a1ee1dd9df0b969e66ce0b7fa30b5e60"
-
 lodash.restparam@^3.0.0:
   version "3.6.1"
   resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/lodash.restparam/-/lodash.restparam-3.6.1.tgz#936a4e309ef330a7645ed4145986c85ae5b20805"
@@ -3260,6 +3260,10 @@ pkg-dir@^1.0.0:
   dependencies:
     find-up "^1.0.0"
 
+popper.js@^1.12.5:
+  version "1.12.6"
+  resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/popper.js/-/popper.js-1.12.6.tgz#91e12a97b07815258b76915d64044e8ac053d426"
+
 postcss-calc@^5.2.0:
   version "5.3.1"
   resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/postcss-calc/-/postcss-calc-5.3.1.tgz#77bae7ca928ad85716e2fda42f261bf7c1d65b5e"
@@ -3679,6 +3683,13 @@ react-infinite@^0.10.0:
     lodash.isfinite "3.2.0"
     object-assign "4.0.1"
 
+react-popper@^0.7.2:
+  version "0.7.4"
+  resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/react-popper/-/react-popper-0.7.4.tgz#8649d539837e7c6f47bc9b24c9cf57a404e199a1"
+  dependencies:
+    popper.js "^1.12.5"
+    prop-types "^15.5.10"
+
 react-proxy@^3.0.0-alpha.0:
   version "3.0.0-alpha.1"
   resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/react-proxy/-/react-proxy-3.0.0-alpha.1.tgz#4400426bcfa80caa6724c7755695315209fa4b07"
@@ -3695,6 +3706,14 @@ react-redux@^4.1.2:
     lodash "^4.2.0"
     loose-envify "^1.1.0"
     prop-types "^15.5.4"
+
+react-reformed@^1.1.2:
+  version "1.1.2"
+  resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/react-reformed/-/react-reformed-1.1.2.tgz#224d82263eec0d956425a6a61d364764c07d2370"
+  dependencies:
+    hoist-non-react-statics "^1.2.0"
+    object-assign "^4.1.0"
+    prop-types "^15.5.10"
 
 react-router-redux@4.0.7:
   version "4.0.7"
@@ -3727,6 +3746,17 @@ react-transition-group@^1.1.3:
     prop-types "^15.5.6"
     warning "^3.0.0"
 
+react-transition-group@^2.2.0:
+  version "2.2.1"
+  resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/react-transition-group/-/react-transition-group-2.2.1.tgz#e9fb677b79e6455fd391b03823afe84849df4a10"
+  dependencies:
+    chain-function "^1.0.0"
+    classnames "^2.2.5"
+    dom-helpers "^3.2.0"
+    loose-envify "^1.3.1"
+    prop-types "^15.5.8"
+    warning "^3.0.0"
+
 react@15.4.2:
   version "15.4.2"
   resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/react/-/react-15.4.2.tgz#41f7991b26185392ba9bae96c8889e7e018397ef"
@@ -3735,21 +3765,17 @@ react@15.4.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
-reactstrap-tether@1.3.4:
-  version "1.3.4"
-  resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/reactstrap-tether/-/reactstrap-tether-1.3.4.tgz#86d94d30216ffa34ceb2c626f4b9912c0d193894"
-
-reactstrap@^4.6.2:
-  version "4.6.2"
-  resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/reactstrap/-/reactstrap-4.6.2.tgz#96e4cddaf1c73923e701e216b33ce5b4740624c1"
+reactstrap@^5.0.0-alpha.3:
+  version "5.0.0-alpha.3"
+  resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/reactstrap/-/reactstrap-5.0.0-alpha.3.tgz#d2b46821efdf8c0511d59c1020fa4cfda174afc9"
   dependencies:
     classnames "^2.2.3"
     lodash.isfunction "^3.0.8"
     lodash.isobject "^3.0.2"
-    lodash.omit "^4.4.1"
     lodash.tonumber "^4.0.3"
     prop-types "^15.5.8"
-    reactstrap-tether "1.3.4"
+    react-popper "^0.7.2"
+    react-transition-group "^2.2.0"
 
 read-pkg-up@^1.0.1:
   version "1.0.1"
@@ -3803,6 +3829,15 @@ recompose@^0.23.4:
     change-emitter "^0.1.2"
     fbjs "^0.8.1"
     hoist-non-react-statics "^1.0.0"
+    symbol-observable "^1.0.4"
+
+recompose@^0.26.0:
+  version "0.26.0"
+  resolved "https://learningobjects.jfrog.io/learningobjects/api/npm/npm-virtual/recompose/-/recompose-0.26.0.tgz#9babff039cb72ba5bd17366d55d7232fbdfb2d30"
+  dependencies:
+    change-emitter "^0.1.2"
+    fbjs "^0.8.1"
+    hoist-non-react-statics "^2.3.1"
     symbol-observable "^1.0.4"
 
 redbox-react@^1.3.6:

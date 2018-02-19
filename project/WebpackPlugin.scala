@@ -2,6 +2,7 @@ package webpack
 
 import java.util.concurrent.atomic.AtomicReference
 
+import sys.process._
 import sbt._
 import sbt.Keys._
 

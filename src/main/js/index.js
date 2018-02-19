@@ -21,7 +21,7 @@ import { launchReducer } from './launches/launchReducer';
 import { reducer as formReducer } from 'redux-form';
 
 import 'bootstrap-loader';
-import './index.less';
+import './main.less';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

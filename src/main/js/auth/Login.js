@@ -1,32 +1,41 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
+import { compose } from 'recompose';
+import reformed from 'react-reformed';
+import { Input, Button, Container, Row, Col } from 'reactstrap';
 
 import './login.less';
 
-const TextInput = ({placeholder, input, meta}) => {
-  return (
-    <input type="text" placeholder={placeholder} {...input} className={classNames('form-control', {'error': meta.submitFailed && meta.error && !meta.dirty})}/>
-  );
-};
+const update = setProperty => e => {
+  setProperty(e.target.name, e.target.value);
+}
 
-const Login = () => (
-  <div className="fill">
-      <div className="row fill login-container">
-        <div className="col-md-4">
-          <Field name="username" placeholder="username" component={TextInput} />
-          <Field name="password" placeholder="password" component={TextInput} />
-        </div>
-      </div>
+const submit = (onSubmit, model) => e => {
+  e.preventDefault();
+  onSubmit(model);
+}
+
+const Login = ({model, setProperty, onSubmit}) => (
+  <div className="fill middle">
+    <Container>
+      <Row className="center">
+        <Col xs="12" sm={{ size: 4, push: 2, pull: 2, offset: 1 }}>
+          <form onSubmit={submit(onSubmit, model)}>
+            <Input name='username' placeholder='username' value={model.firstName} onChange={update(setProperty)} />
+            <Input name='password' placeholder='password' type='password' value={model.lastName} onChange={update(setProperty)} />
+            <Button type='submit' block>Submit</Button>
+          </form>
+        </Col>
+      </Row>
+    </Container>
   </div>
 );
 
-const WrappedForm = reduxForm({
-  form: 'login'
-})(Login);
-
-const mapStateToProps = state => ({});
-const mapDispatchToProps = d => ({dispatch: d});
-
-export default connect(mapStateToProps, mapDispatchToProps)(WrappedForm);
+export default compose(
+  connect(
+    state => ({}),
+    d => ({dispatch: d})
+  ),
+  reformed()
+)(Login);

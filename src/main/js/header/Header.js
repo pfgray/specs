@@ -21,9 +21,7 @@ const Header = ({children}) => (
       </div>
     </div>
 
-    <div className="container main-container">
-      {children}
-    </div>
+    {children}
   </div>
 );
 

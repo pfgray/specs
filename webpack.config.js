@@ -25,7 +25,7 @@ module.exports = {
       test: /\.less$/,
       use: ['style-loader', 'css-loader', 'less-loader']
     },{
-      test: /\.png$/,
+      test: /\.(png)$/,
       use: ['url-loader']
     }]
   },
