@@ -18,7 +18,8 @@ object SpecsRoot {
     "mypass"                // password
   )
 
-  type RequestHandler = PartialFunction[Request[IO], IO[Response[IO]]]
+  type IOResp = IO[Response[IO]]
+  type RequestHandler = PartialFunction[Request[IO], IOResp]
 
   implicit def pfSemigroup = new Semigroup[RequestHandler] {
     override def combine(a: RequestHandler, b: RequestHandler): RequestHandler = a orElse b

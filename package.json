@@ -2,6 +2,7 @@
   "name": "specs",
   "version": "1.0.0",
   "dependencies": {
+    "antd": "^3.4.2",
     "babel-polyfill": "^6.3.14",
     "babel-runtime": "^6.3.19",
     "bootstrap": "4.0.0-alpha.6",

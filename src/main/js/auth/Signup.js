@@ -34,13 +34,12 @@ const Login = ({model, setProperty, onSubmit, submitting, setSubmitting}) => (
           <FormItem>
             <Input type="password" placeholder="Password" name='password' value={model.password} onChange={update(setProperty)} disabled={submitting} />
           </FormItem>
-          <Button type="default" htmlType="submit" className="login-form-button" loading={submitting}>
-            Log in
-          </Button>
-
           <FormItem>
-            <div>New to here? <a href="/signup">Sign up.</a></div>
+            <Input type="password" placeholder="Confirm Password" name='confirmPassword' value={model.confirmPpassword} onChange={update(setProperty)} disabled={submitting} />
           </FormItem>
+          <Button type="default" htmlType="submit" className="login-form-button" loading={submitting}>
+            Sign Up
+          </Button>
         </Form>
       </Col>
       </Row>
