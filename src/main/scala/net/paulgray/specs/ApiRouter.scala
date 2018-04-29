@@ -15,7 +15,7 @@ import org.http4s.dsl.io._
 import org.http4s.circe._
 import SpecsRoot.pfSemigroup
 import cats.implicits._
-import net.paulgray.specs.user.SessionRoutes
+import net.paulgray.specs.client.SessionRoutes
 
 object ApiRouter {
 

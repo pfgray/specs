@@ -26,7 +26,7 @@ const Login = ({model, setProperty, onSubmit, submitting, setSubmitting}) => (
   <div className="login-page">
     <Row>
       <Col sm={{span: 8, offset: 8}} xs={{span: 22, offset: 1}}>
-        <h1>Specs</h1>
+        <h1>Specs.</h1>
         <Form onSubmit={submit(model, setSubmitting)}>
           <FormItem>
             <Input name='username' placeholder='Username' value={model.username} onChange={update(setProperty)} disabled={submitting} />
@@ -35,7 +35,7 @@ const Login = ({model, setProperty, onSubmit, submitting, setSubmitting}) => (
             <Input type="password" placeholder="Password" name='password' value={model.password} onChange={update(setProperty)} disabled={submitting} />
           </FormItem>
           <FormItem>
-            <Input type="password" placeholder="Confirm Password" name='confirmPassword' value={model.confirmPpassword} onChange={update(setProperty)} disabled={submitting} />
+            <Input type="password" placeholder="Confirm Password" name='confirmPassword' value={model.confirmPassword} onChange={update(setProperty)} disabled={submitting} />
           </FormItem>
           <Button type="default" htmlType="submit" className="login-form-button" loading={submitting}>
             Sign Up

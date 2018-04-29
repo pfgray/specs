@@ -55,6 +55,7 @@ libraryDependencies ++= Seq(
   "oauth.signpost" % "signpost-core" % "1.2.1.2",
   "oauth.signpost" % "signpost-commonshttp4" % "1.2.1.2",
 
+  "com.github.t3hnar" %% "scala-bcrypt" % "3.1",
 
   // doobie for db access
   "org.tpolecat" %% "doobie-core"      % "0.5.0",
