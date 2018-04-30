@@ -1,25 +1,27 @@
 import React from 'react';
-import { Link } from 'react-router';
 
 import { Layout, Menu, Breadcrumb, Icon} from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
+import { Link, Route } from 'react-router-dom';
+
+// #1890ff
 
 const LayoutOut = ({children}) => (
   <Layout style={{minHeight: '100vh'}}>
-    <Sider>
-      <Menu mode="inline">
-        <Menu.Item key="1">Launches</Menu.Item>
-        <Menu.Item key="2">Users</Menu.Item>
-        <Menu.Item key="3">Courses</Menu.Item>
+    <Sider collapsible>
+      <h1 className='logo' style={{color: '#fff',padding: '1rem'}}>Specs.</h1>
+      <Menu theme="dark" mode="inline" >
+        <Menu.Item key="1"><Link to='/'>Launches</Link></Menu.Item>
+        <Menu.Item key="2"><Link to='/users'>Users</Link></Menu.Item>
+        <Menu.Item key="3"><Link to='/courses'>Courses</Link></Menu.Item>
       </Menu>
     </Sider>
 
-    <Layout>
-      <Header style={{background:'#fff', padding:0}}></Header>
-      <Content>
-        {children}
-      </Content>
-    </Layout>
+      <Route exact path='/' component={() => <span>launches</span>} />
+      <Route path='/users' component={() => <span>users</span>} />
+      <Route path='/courses' component={() => <span>courses</span>} />
+      {/* <Route path='/users'>users</Route>
+      <Route path='/courses'>courses</Route> */}
   </Layout>
 );
 

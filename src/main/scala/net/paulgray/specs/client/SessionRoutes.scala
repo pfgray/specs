@@ -64,7 +64,7 @@ object SessionRoutes {
     case req @ GET -> ApiRoot / "self" =>
       withClient[Client](req) {
         client =>
-          EitherT(implicitly[Applicative[ConnectionIO]].pure(Right(client)))
+          EitherT(Applicative[ConnectionIO].pure(Right(client)))
       }
   }
 

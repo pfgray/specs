@@ -6,28 +6,33 @@ import reformed from 'react-reformed';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 const FormItem = Form.Item;
 import { Row, Col } from 'antd';
+import axios from 'axios';
+import { withRouter } from "react-router-dom";
+import lscache from 'lscache';
 
 const update = setProperty => e => {
   setProperty(e.target.name, e.target.value);
 }
 
-const submit = (model, setSubmitting) => e => {
+const submit = (model, setSubmitting, history) => e => {
   e.preventDefault();
   setSubmitting(true);
   console.log('submitting: ', model);
-  // onSubmit(model);
-  // login!
-  setTimeout(() => {
-    setSubmitting(false);
-  }, 2000);
+  axios.post('/api/login', model)
+    .then(resp => {
+      // store it up!
+      lscache.set('auth_token', resp.data.token);
+      setSubmitting(false);
+      history.push('/');
+    });
 }
 
-const Login = ({model, setProperty, onSubmit, submitting, setSubmitting}) => (
+const Login = ({model, setProperty, onSubmit, submitting, setSubmitting, history}) => (
   <div className="login-page">
     <Row>
       <Col sm={{span: 8, offset: 8}} xs={{span: 22, offset: 1}}>
         <h1>Specs</h1>
-        <Form onSubmit={submit(model, setSubmitting)}>
+        <Form onSubmit={submit(model, setSubmitting, history)}>
           <FormItem>
             <Input name='username' placeholder='Username' value={model.username} onChange={update(setProperty)} disabled={submitting} />
           </FormItem>
@@ -53,5 +58,6 @@ export default compose(
     d => ({dispatch: d})
   ),
   reformed(),
-  withState('submitting', 'setSubmitting', false)
+  withState('submitting', 'setSubmitting', false),
+  withRouter
 )(Login);

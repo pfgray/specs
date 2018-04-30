@@ -6,6 +6,7 @@ import reformed from 'react-reformed';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 const FormItem = Form.Item;
 import { Row, Col } from 'antd';
+import axios from 'axios';
 
 const update = setProperty => e => {
   setProperty(e.target.name, e.target.value);
@@ -15,11 +16,13 @@ const submit = (model, setSubmitting) => e => {
   e.preventDefault();
   setSubmitting(true);
   console.log('submitting: ', model);
-  // onSubmit(model);
-  // login!
-  setTimeout(() => {
-    setSubmitting(false);
-  }, 2000);
+  axios.post('/api/login')
+    .then(resp => {
+      // store it up!
+      console.log('got:', resp)
+      // lscache.set('auth_token', )
+      setSubmitting(false);
+    });
 }
 
 const Login = ({model, setProperty, onSubmit, submitting, setSubmitting}) => (

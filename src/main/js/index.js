@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-import createHashHistory from 'history/lib/createHashHistory';
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import createHistory from 'history/createBrowserHistory';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ReduxThunk from 'redux-thunk';
+import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
 
 import Layout from './layout/Layout';
 import Launches from './launches/Launches';
@@ -26,6 +26,9 @@ import './index.less';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+const history = createHistory();
+const routeMiddleware = routerMiddleware(history);
+
 const store = createStore(
   combineReducers({
     test: (state = {}, action) => state,
@@ -34,23 +37,20 @@ const store = createStore(
     form: formReducer
   }),
   composeEnhancers(
-    applyMiddleware(ReduxThunk)
+    applyMiddleware(ReduxThunk),
+    applyMiddleware(routeMiddleware)
   )
   // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-const history = syncHistoryWithStore(browserHistory, store);
-
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history}>
-      <Route path="/login" component={Login} />
-      <Route path="/signup" component={Signup} />
-      <Route component={Layout}>
-        <Route path="/" component={Launches} />
-        <Route path="/registration" component={Registration} />
-        <Route path="/commander" component={Commander} />
-      </Route>
+    <Router>
+      <div>
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={Signup} />
+        <Route component={Layout} />
+      </div>
     </Router>
   </Provider>,
   document.getElementById('main')
