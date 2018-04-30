@@ -17,8 +17,10 @@ import org.http4s.{EntityBody, EntityEncoder, Request, Response, Status}
 import io.circe.syntax._
 import io.circe.generic.auto._
 import com.github.t3hnar.bcrypt._
+import net.paulgray.specs.RequestUtil.DbResultResponse
 import net.paulgray.specs.client.TokenQueries.Token
 import org.http4s.syntax._
+import net.paulgray.specs.RequestUtil._
 
 object SessionRoutes {
 
@@ -27,8 +29,6 @@ object SessionRoutes {
   case class SignupResponse(status: String)
 
   case class TokenResponse(token: String)
-
-  type DbResultResponse[A] = EitherT[ConnectionIO, IO[Response[IO]], A]
 
   implicit val decoder = jsonOf[IO, SignupRequest]
 
@@ -83,9 +83,6 @@ object SessionRoutes {
           }).transact(xa).flatMap(identity)
       }
   }
-
-  def findUserForToken(token: String): DbResultResponse[Client] =
-    OptionT(TokenQueries.getClientForToken(token)).toRight(Forbidden("The token included in this request is invalid."))
 
   def processLogin(login: LoginRequest): DbResultResponse[Token] =
     for {

@@ -11,15 +11,16 @@ const LayoutOut = ({children}) => (
     <Sider collapsible>
       <h1 className='logo' style={{color: '#fff',padding: '1rem'}}>Specs.</h1>
       <Menu theme="dark" mode="inline" >
-        <Menu.Item key="1"><Link to='/'>Launches</Link></Menu.Item>
+        <Menu.Item key="1"><Link to='/'>Organizations</Link></Menu.Item>
+        <Menu.Item key="1"><Link to='/launches'>Launches</Link></Menu.Item>
         <Menu.Item key="2"><Link to='/users'>Users</Link></Menu.Item>
         <Menu.Item key="3"><Link to='/courses'>Courses</Link></Menu.Item>
       </Menu>
     </Sider>
-
-      <Route exact path='/' component={() => <span>launches</span>} />
-      <Route path='/users' component={() => <span>users</span>} />
-      <Route path='/courses' component={() => <span>courses</span>} />
+    <Route exact path='/' component={() => <span>organizations</span>} />
+    <Route path='/launches' component={() => <span>launches</span>} />
+    <Route path='/users' component={() => <span>users</span>} />
+    <Route path='/courses' component={() => <span>courses</span>} />
       {/* <Route path='/users'>users</Route>
       <Route path='/courses'>courses</Route> */}
   </Layout>
