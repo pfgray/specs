@@ -5,8 +5,25 @@
 ```sh
 $ cd Specs
 $ ./sbt
-> jetty:start
-> browse
+
+start the backend:
+```
+> reStart
+```
+After making changes, restart the backend:
+```
+reStart
 ```
 
-If `browse` doesn't launch your browser, manually open [http://localhost:8080/](http://localhost:8080/) in your browser.
+the app will start listening on port 8080
+
+start the frontend:
+```
+> webpack:start
+```
+The webpack server will watch for changes and automatically re-compile
+If you make changes to the webpack configuration itself, then you'll need to stop and start webpack:
+```
+> ;webpack:stop;webpack:start
+```
+
