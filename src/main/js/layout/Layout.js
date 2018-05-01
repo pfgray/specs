@@ -4,6 +4,8 @@ import { Layout, Menu, Breadcrumb, Icon} from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
 import { Link, Route } from 'react-router-dom';
 
+import Organizations from '../organizations/Organizations';
+
 // #1890ff
 
 const LayoutOut = ({children}) => (
@@ -17,7 +19,7 @@ const LayoutOut = ({children}) => (
         <Menu.Item key="3"><Link to='/courses'>Courses</Link></Menu.Item>
       </Menu>
     </Sider>
-    <Route exact path='/' component={() => <span>organizations</span>} />
+    <Route exact path='/' component={Organizations} />
     <Route path='/launches' component={() => <span>launches</span>} />
     <Route path='/users' component={() => <span>users</span>} />
     <Route path='/courses' component={() => <span>courses</span>} />
