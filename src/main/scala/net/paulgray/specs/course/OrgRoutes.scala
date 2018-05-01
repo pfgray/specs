@@ -10,7 +10,7 @@ import net.paulgray.specs.SpecsRoot.RequestHandler
 import net.paulgray.specs.client.ClientQueries.Client
 import org.http4s.dsl.io._
 import net.paulgray.specs.RequestUtil._
-import net.paulgray.specs.course.OrgQueries
+import net.paulgray.specs.course.{CourseQueries, OrgQueries}
 import net.paulgray.specs.course.OrgQueries._
 import org.http4s.circe._
 import io.circe.generic.auto._
@@ -31,22 +31,15 @@ object OrgRoutes {
     case req @ GET -> ApiRoot / "organizations" =>
       withClient(req) {
         client =>
-          EitherT(OrgQueries.getOrganizationsForClient(client.id).map(orgs => orgs.asRight[IO[Response[IO]]]))
+          EitherT(CourseQueries.getCoursesForOrganization(client.id).map(orgs => orgs.asRight[IO[Response[IO]]]))
       }
 
     // create
-//    case req @ POST -> ApiRoot / "organizations" =>
-//      withClient(req) {
-//        client =>
-//          // ConnectionIO[Int]
-//
-//
-//          val wut = for {
-//            create  <- req.as[CreateOrganizationRequest]
-//            success <- OrgQueries.createOrganization(create.name, client.id)
-//          } yield success
-//          wut
-//      }
+    case req @ POST -> ApiRoot / "organizations" =>
+      withClientAndBody[Int, CreateOrganizationRequest](req) {
+        (client, req) =>
+          EitherT(OrgQueries.createOrganization(req.name, client.id).map(_.asRight[IO[Response[IO]]]))
+      }
 
   }
 

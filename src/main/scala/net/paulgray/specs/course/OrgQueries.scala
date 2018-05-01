@@ -2,6 +2,7 @@ package net.paulgray.specs.course
 
 import doobie.free.connection.ConnectionIO
 import doobie.implicits._
+import doobie.util.query.{Query, Query0}
 
 object OrgQueries {
 
@@ -12,5 +13,8 @@ object OrgQueries {
 
   def getOrganizationsForClient(clientId: Long): ConnectionIO[List[Organization]] =
     sql"select id, name, client_id from organizations where client_id = $clientId".query[Organization].list
+
+  def getOrganization(id: Long): Query0[Organization] =
+    sql"select id, name, client_id from organizations where id = $id".query[Organization]
 
 }

@@ -16,6 +16,7 @@ import org.http4s.circe._
 import SpecsRoot.pfSemigroup
 import cats.implicits._
 import net.paulgray.specs.client.{OrgRoutes, SessionRoutes}
+import net.paulgray.specs.course.CourseRoutes
 
 object ApiRouter {
 
@@ -27,11 +28,14 @@ object ApiRouter {
 
   case class Example(name: String, wootLevel: Int)
 
-  def router: RequestHandler = SessionRoutes.routes |+| OrgRoutes.routes |+| {
-    case GET -> ApiRoot / "test" =>
-      IO(Response(Status.Ok))
-    case GET -> ApiRoot / "statistics" =>
-      Ok(Example("Paul", 5).asJson)
+  def router: RequestHandler =
+    SessionRoutes.routes |+|
+      OrgRoutes.routes |+|
+      CourseRoutes.routes |+| {
+      case GET -> ApiRoot / "test" =>
+        IO(Response(Status.Ok))
+      case GET -> ApiRoot / "statistics" =>
+        Ok(Example("Paul", 5).asJson)
   }
 
 }

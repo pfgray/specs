@@ -1,26 +1,22 @@
 package net.paulgray.specs.client
 
+import cats.Applicative
 import cats.data.{EitherT, OptionT}
 import cats.effect.IO
+import com.github.t3hnar.bcrypt._
 import doobie.free.connection.ConnectionIO
+import doobie.implicits._
+import io.circe.Encoder
 import io.circe.generic.auto._
 import io.circe.syntax._
 import net.paulgray.specs.ApiRouter.ApiRoot
-import net.paulgray.specs.SpecsRoot.{IOResp, RequestHandler, xa}
+import net.paulgray.specs.RequestUtil.{DbResultResponse, _}
+import net.paulgray.specs.SpecsRoot.{RequestHandler, xa}
+import net.paulgray.specs.client.ClientQueries.Client
+import net.paulgray.specs.client.TokenQueries.Token
 import org.http4s.circe._
 import org.http4s.dsl.io._
-import doobie.implicits._
-import cats.{Applicative, Monad, implicits}
-import io.circe.{Encoder, Json}
-import net.paulgray.specs.client.ClientQueries.Client
-import org.http4s.{EntityBody, EntityEncoder, Request, Response, Status}
-import io.circe.syntax._
-import io.circe.generic.auto._
-import com.github.t3hnar.bcrypt._
-import net.paulgray.specs.RequestUtil.DbResultResponse
-import net.paulgray.specs.client.TokenQueries.Token
-import org.http4s.syntax._
-import net.paulgray.specs.RequestUtil._
+import org.http4s.{Request, Response}
 
 object SessionRoutes {
 
