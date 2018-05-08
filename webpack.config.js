@@ -18,7 +18,7 @@ module.exports = {
   devtool: 'cheap-module-source-map',
   module: {
     rules:[{
-      test: /\.(js|jsx|ts)$/,
+      test: /\.(jsx?|tsx?)$/,
       exclude: /node_modules/,
       use: ['babel-loader'],
     },{
@@ -30,7 +30,7 @@ module.exports = {
     }]
   },
   resolve: {
-    extensions: [".js", ".jsx"],
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
     alias: {
       styles: path.resolve(__dirname, './src/main/styles/')
     }

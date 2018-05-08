@@ -1,7 +1,7 @@
 package net.paulgray.specs.client
 
 import cats.Applicative
-import cats.data.EitherT
+import cats.data.{EitherT, OptionT}
 import cats.effect.IO
 import doobie.free.connection.ConnectionIO
 import doobie.implicits._
@@ -16,6 +16,7 @@ import org.http4s.circe._
 import io.circe.generic.auto._
 import io.circe.syntax._
 import cats.syntax.either._
+import net.paulgray.specs.course.CourseRoutes.orgIsForClient
 import org.http4s.Response
 
 object OrgRoutes {
@@ -27,11 +28,30 @@ object OrgRoutes {
 
   def routes: RequestHandler = {
 
+    // get one
+    case req @ GET -> ApiRoot / "organizations" / LongVar(orgId) =>
+      withClient(req) {
+        client =>
+          for {
+            org <- getOrganization(orgId, client.id)
+          } yield org
+      }
+
+    // edit
+    case req @ PUT -> ApiRoot / "organizations" / LongVar(orgId) =>
+      withClientAndBody[Int, CreateOrganizationRequest](req) {
+        (client, req) =>
+          for {
+            org    <- getOrganization(orgId, client.id)
+            update <- updateOrg(org.id, req.name)
+          } yield 1
+      }
+
     // list
     case req @ GET -> ApiRoot / "organizations" =>
       withClient(req) {
         client =>
-          EitherT(CourseQueries.getCoursesForOrganization(client.id).map(orgs => orgs.asRight[IO[Response[IO]]]))
+          EitherT(OrgQueries.getOrganizationsForClient(client.id).map(orgs => Orgs(orgs).asRight[IO[Response[IO]]]))
       }
 
     // create
@@ -43,5 +63,13 @@ object OrgRoutes {
 
   }
 
+  def updateOrg(orgId: Long, name: String): DbResultResponse[Int] =
+    EitherT(updateOrganization(orgId, name).map(_.asRight[IO[Response[IO]]]))
+
+  def getOrganization(orgId: Long, clientId: Long): DbResultResponse[Organization] =
+    for {
+      org <- OptionT(OrgQueries.getOrganization(orgId).option).toRight(NotFound(s"No organization with id: $orgId"))
+      _   <- orgIsForClient(org, clientId)
+    } yield org
 
 }

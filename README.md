@@ -15,7 +15,7 @@ After making changes, restart the backend:
 reStart
 ```
 
-the app will start listening on port 8080
+The app will start listening on port 8080
 
 start the frontend:
 ```

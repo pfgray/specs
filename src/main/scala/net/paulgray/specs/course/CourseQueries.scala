@@ -2,7 +2,6 @@ package net.paulgray.specs.course
 
 import doobie.free.connection.ConnectionIO
 import doobie.implicits._
-import doobie.util.query.Query0
 
 object CourseQueries {
 

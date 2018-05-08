@@ -11,6 +11,9 @@ object OrgQueries {
   def createOrganization(name: String, clientId: Long): ConnectionIO[Int] =
     sql"insert into organizations (name, client_id) values ($name, $clientId)".update.run
 
+  def updateOrganization(id: Long, name: String): ConnectionIO[Int] =
+    sql"update organizations set name = $name where id = $id".update.run
+
   def getOrganizationsForClient(clientId: Long): ConnectionIO[List[Organization]] =
     sql"select id, name, client_id from organizations where client_id = $clientId".query[Organization].list
 

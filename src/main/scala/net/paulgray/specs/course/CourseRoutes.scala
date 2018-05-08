@@ -24,6 +24,8 @@ import net.paulgray.specs.course.OrgQueries.Organization
 
 object CourseRoutes {
 
+  import net.paulgray.specs.client.OrgRoutes._
+
   case class CreateCourseRequest(name: String)
   implicit val decoder = jsonOf[IO, CreateCourseRequest]
   case class CoursesResponse(courses: List[Course])
@@ -56,12 +58,6 @@ object CourseRoutes {
 
   def createCourse(name: String, organization: Long): DbResultResponse[Int] =
     EitherT(CourseQueries.createCourse(name, organization).map(_.asRight[IO[Response[IO]]]))
-
-  def getOrganization(orgId: Long, clientId: Long): DbResultResponse[Organization] =
-    for {
-      org <- OptionT(OrgQueries.getOrganization(orgId).option).toRight(NotFound(s"No organization with id: $orgId"))
-      _   <- orgIsForClient(org, clientId)
-    } yield org
 
   def orgIsForClient(organization: Organization, clientId: Long): DbResultResponse[Boolean] =
     if (organization.clientId == clientId) {
