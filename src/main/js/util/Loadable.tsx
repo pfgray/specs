@@ -23,7 +23,7 @@ const LoadIcon = () => (
 );
 
 const Loadable = (props: any) => {
-  console.log('LOLOLOL got', props);
+  console.log('got props:', props);
   return props.loading ? <LoadIcon /> : props.children(props.data);
 };
 

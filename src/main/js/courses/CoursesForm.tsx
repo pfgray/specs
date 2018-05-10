@@ -1,35 +1,34 @@
-import React from 'react';
+import * as React from 'react';
 import { withPromise, fromRenderProp } from 'chainable-components';
 import axios from 'axios';
-import { List, Icon, Row, Col, Button, Input } from 'antd';
-import { Link, Route } from 'react-router-dom';
+import { Row, Col, Button, Input } from 'antd';
+import { Route } from 'react-router-dom';
 import withAuth from '../util/AuthContext';
-import withLoading from '../util/Loadable';
 import entityForm, { GenericForm } from '../entityForm/EntityForm';
 
 const withRoute = fromRenderProp(Route);
 
-const OrganizationForm = () =>
+const CoursesForm = () =>
   withAuth
     .chain(token =>
       withRoute({}).chain(route =>
         entityForm({
           auth: token,
           edit: route.location.pathname.indexOf('edit') !== -1,
-          baseUrl: '/api/organizations',
-          values:  [{
+          baseUrl: `/api/organizations/${route.match.params.orgId}/courses`,
+          values: [{
             name: 'name',
             intialValue: '',
             label: 'Name'
           }],
           afterSuccess: () => {
-            route.history.push('/');
+            route.history.goBack();
           },
-          id: route.match.params.id,
-          ignore: ['id', 'clientId']
+          id: route.match.params.courseId,
+          ignore: ['id', 'organizationId']
         })
       )
     )
     .ap(GenericForm);
 
-export default OrganizationForm;
+export default CoursesForm;

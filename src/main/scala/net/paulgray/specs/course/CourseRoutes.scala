@@ -32,6 +32,26 @@ object CourseRoutes {
 
   def routes: RequestHandler = {
 
+    // get
+    case req @ GET -> ApiRoot / "organizations" / LongVar(orgId) / "courses" / LongVar(courseId) =>
+      withClient[Course](req) {
+        client =>
+          for {
+            org    <- getOrganization(orgId, client.id)
+            course <- getCourse(courseId)
+          } yield course
+      }
+
+    // edit
+    case req @ PUT -> ApiRoot / "organizations" / LongVar(orgId) / "courses" / LongVar(courseId) =>
+      withClientAndBody[Int, CreateCourseRequest](req) {
+        (client, req) =>
+          for {
+            org     <- getOrganization(orgId, client.id)
+            result <- updateCourse(courseId, req.name)
+          } yield result
+      }
+
     // list
     case req @ GET -> ApiRoot / "organizations" / LongVar(orgId) / "courses" =>
       withClient[CoursesResponse](req) {
@@ -52,6 +72,12 @@ object CourseRoutes {
           } yield success
       }
   }
+
+  def getCourse(courseId: Long): DbResultResponse[Course] =
+    EitherT(CourseQueries.getCourse(courseId).map(_.asRight[IO[Response[IO]]]))
+
+  def updateCourse(courseId: Long, name: String): DbResultResponse[Int] =
+    EitherT(CourseQueries.updateCourse(courseId, name).map(_.asRight[IO[Response[IO]]]))
 
   def getCourses(orgId: Long): DbResultResponse[List[Course]] =
     EitherT(CourseQueries.getCoursesForOrganization(orgId).map(_.asRight[IO[Response[IO]]]))

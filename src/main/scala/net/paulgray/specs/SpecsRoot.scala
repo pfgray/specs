@@ -33,7 +33,7 @@ object SpecsRoot {
     // hmm, can we combine these?
     case req @ GET -> Root =>
       Ok(html.index(s"${req.origin}"))
-    case req @ GET -> Root / _ =>
+    case req @ GET -> _ =>
       Ok(html.index(s"${req.origin}"))
   }
 

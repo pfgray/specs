@@ -5,7 +5,9 @@ const { Header, Content, Footer, Sider } = Layout;
 import { Link, Route } from 'react-router-dom';
 
 import Organizations from '../organizations/Organizations.tsx';
-import OrganizationForm from '../organizations/OrganizationForm';
+import OrganizationForm from '../organizations/OrganizationForm.tsx';
+import Courses from '../courses/Courses.tsx';
+import CoursesForm from '../courses/CoursesForm.tsx';
 
 // #1890ff
 
@@ -27,7 +29,10 @@ const LayoutOut = ({ children }) => (
         <Route exact path='/organizations/edit/:id' component={OrganizationForm} />
         <Route path='/launches' component={() => <span>launches</span>} />
         <Route path='/users' component={() => <span>users</span>} />
-        <Route path='/courses' component={() => <span>courses</span>} />
+        <Route exact path='/organizations/:orgId/courses' component={Courses} />
+        <Route exact path='/organizations/:orgId/courses/:courseId/edit' component={CoursesForm} />
+        <Route exact path='/organizations/:orgId/courses/new' component={CoursesForm} />
+        
         {/* <Route path='/users'>users</Route>
       <Route path='/courses'>courses</Route> */}
       </Content>

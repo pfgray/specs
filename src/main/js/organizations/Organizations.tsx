@@ -64,7 +64,7 @@ const Organizations = () =>
                 extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
               >
                 <List.Item.Meta
-                  title={<a href={'http://www.google.com'}>{item.name}</a>}
+                  title={<Link to={`/organizations/${item.id}/courses`}>{item.name}</Link>}
                   description={"this is the course description"}
                 />
                 {item.name}
