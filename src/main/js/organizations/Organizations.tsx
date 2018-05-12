@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 import withAuth from '../util/AuthContext';
 import withLoading from '../util/Loadable';
+import IconText from '../components/IconText';
 
 function delay(t, v) {
   return new Promise(function (resolve) {
@@ -18,13 +19,6 @@ Promise.prototype.delay = function (t) {
     return delay(t, v);
   });
 }
-
-const IconText = ({ type, text }) => (
-  <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-    {text}
-  </span>
-);
 
 const Organizations = () =>
   withAuth.chain(token => {
@@ -50,17 +44,14 @@ const Organizations = () =>
           <List
             itemLayout="vertical"
             size="large"
-            pagination={{
-              onChange: (page) => {
-                console.log(page);
-              },
-              pageSize: 3,
-            }}
             dataSource={orgs.organizations}
             renderItem={item => (
               <List.Item
                 key={item.name}
-                actions={[<IconText type="book" text="..." />, <IconText type="user" text="..." />]}
+                actions={[
+                  <Link to={`/organizations/${item.id}/courses`}><IconText type="book" text={item.coursesCount} /></Link>,
+                  <Link to={`/organizations/${item.id}/users`}><IconText type="user" text={item.usersCount}/></Link>
+                ]}
                 extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
               >
                 <List.Item.Meta

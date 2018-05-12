@@ -17,6 +17,7 @@ import SpecsRoot.pfSemigroup
 import cats.implicits._
 import net.paulgray.specs.client.{OrgRoutes, SessionRoutes}
 import net.paulgray.specs.course.CourseRoutes
+import net.paulgray.specs.user.UserRoutes
 
 object ApiRouter {
 
@@ -31,6 +32,7 @@ object ApiRouter {
   def router: RequestHandler =
     SessionRoutes.routes |+|
       OrgRoutes.routes |+|
+      UserRoutes.routes |+|
       CourseRoutes.routes |+| {
       case GET -> ApiRoot / "test" =>
         IO(Response(Status.Ok))

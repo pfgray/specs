@@ -85,7 +85,6 @@ export const GenericForm = ([formik, config]) => (
 );
 
 function findLabel(key: string, config: EntityFormConfig): string {
-  console.log('searching: ', config);
   const value = config.values.find(value => value.name === key);
   return value ? value.label : ''; 
 }

@@ -24,7 +24,7 @@ object OrgRoutes {
   case class CreateOrganizationRequest(name: String)
   implicit val decoder = jsonOf[IO, CreateOrganizationRequest]
 
-  case class Orgs(organizations: List[Organization])
+  case class Orgs[T](organizations: List[T])
 
   def routes: RequestHandler = {
 
@@ -51,7 +51,7 @@ object OrgRoutes {
     case req @ GET -> ApiRoot / "organizations" =>
       withClient(req) {
         client =>
-          EitherT(OrgQueries.getOrganizationsForClient(client.id).map(orgs => Orgs(orgs).asRight[IO[Response[IO]]]))
+          EitherT(OrgQueries.getOrganizationsForClientWithAggregates(client.id).map(orgs => Orgs(orgs).asRight[IO[Response[IO]]]))
       }
 
     // create

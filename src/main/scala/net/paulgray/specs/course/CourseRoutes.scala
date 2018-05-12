@@ -38,7 +38,7 @@ object CourseRoutes {
         client =>
           for {
             org    <- getOrganization(orgId, client.id)
-            course <- getCourse(courseId)
+            course <- getCourse(courseId, org.id)
           } yield course
       }
 
@@ -73,8 +73,8 @@ object CourseRoutes {
       }
   }
 
-  def getCourse(courseId: Long): DbResultResponse[Course] =
-    EitherT(CourseQueries.getCourse(courseId).map(_.asRight[IO[Response[IO]]]))
+  def getCourse(courseId: Long, orgId: Long): DbResultResponse[Course] =
+    OptionT(CourseQueries.getCourse(courseId, orgId).option).toRight(NotFound(s"No course with id: $courseId found in organization: $orgId"))
 
   def updateCourse(courseId: Long, name: String): DbResultResponse[Int] =
     EitherT(CourseQueries.updateCourse(courseId, name).map(_.asRight[IO[Response[IO]]]))

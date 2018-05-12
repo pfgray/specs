@@ -3,6 +3,7 @@ import { withPromise, fromRenderProp } from 'chainable-components';
 import * as axios from 'axios';
 import { List, Icon, Row, Col } from 'antd';
 import { Route, Link } from 'react-router-dom';
+import IconText from '../components/IconText';
 import ItemListLayout from '../layout/ItemListLayout';
 
 import withAuth from '../util/AuthContext';
@@ -15,26 +16,26 @@ const Courses = () =>
     withRoute({}).chain(route =>
       withPromise({
         get: () => Promise.all([
-          axios.get(`/api/organizations/${route.match.params.orgId}/courses`, {
+          axios.get(`/api/organizations/${route.match.params.orgId}/users`, {
             headers: { Authorization: token }
           }),
           axios.get(`/api/organizations/${route.match.params.orgId}`, {
             headers: { Authorization: token }
           })
         ])
-      }).chain(coursesReq =>
-        withLoading(coursesReq).map(([courses, org]) => [courses, org, token, route.match.params.orgId])
+      }).chain(resp =>
+        withLoading(resp).map(([users, org]) => [users, org, token, route.match.params.orgId])
       )
     )
-  ).ap(([courses, org, token, orgId]) => (
-    <ItemListLayout title={'Courses'} add={{ href: `/organizations/${orgId}/courses/new`, title: 'New course' }} orgName={org.data.name}>
-      <div className='gutter-box'>
+  ).ap(([users, org, token, orgId]) => (
+    <ItemListLayout title={'Users'} add={{ href: `/organizations/${orgId}/users/new`, title: 'New user' }} orgName={org.data.name}>
+      <div className='gutter-box' style={{ marginTop: '1rem' }}>
         <List
           itemLayout="vertical"
-          dataSource={courses.data.courses}
-          renderItem={course => (
-            <List.Item actions={[<Link to={`/organizations/${orgId}/courses/${course.id}/edit`}>edit</Link>]}>
-              {course.name}
+          dataSource={users.data.users}
+          renderItem={user => (
+            <List.Item actions={[<Link to={`/organizations/${orgId}/users/${user.id}/edit`}>edit</Link>]}>
+              <IconText type='user' text={user.username} />
             </List.Item>
           )} />
       </div>

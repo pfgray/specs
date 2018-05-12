@@ -8,6 +8,8 @@ import Organizations from '../organizations/Organizations.tsx';
 import OrganizationForm from '../organizations/OrganizationForm.tsx';
 import Courses from '../courses/Courses.tsx';
 import CoursesForm from '../courses/CoursesForm.tsx';
+import Users from '../users/Users.tsx';
+import UsersForm from '../users/UsersForm.tsx';
 
 // #1890ff
 
@@ -29,9 +31,14 @@ const LayoutOut = ({ children }) => (
         <Route exact path='/organizations/edit/:id' component={OrganizationForm} />
         <Route path='/launches' component={() => <span>launches</span>} />
         <Route path='/users' component={() => <span>users</span>} />
+
         <Route exact path='/organizations/:orgId/courses' component={Courses} />
         <Route exact path='/organizations/:orgId/courses/:courseId/edit' component={CoursesForm} />
         <Route exact path='/organizations/:orgId/courses/new' component={CoursesForm} />
+
+        <Route exact path='/organizations/:orgId/users' component={Users} />
+        <Route exact path='/organizations/:orgId/users/:userId/edit' component={UsersForm} />
+        <Route exact path='/organizations/:orgId/users/new' component={UsersForm} />
         
         {/* <Route path='/users'>users</Route>
       <Route path='/courses'>courses</Route> */}
