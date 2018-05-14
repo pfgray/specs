@@ -47,20 +47,20 @@ const Organizations = () =>
             dataSource={orgs.organizations}
             renderItem={item => (
               <List.Item
-                key={item.name}
+                key={item.org.name}
                 actions={[
-                  <Link to={`/organizations/${item.id}/courses`}><IconText type="book" text={item.coursesCount} /></Link>,
-                  <Link to={`/organizations/${item.id}/users`}><IconText type="user" text={item.usersCount}/></Link>
+                  <Link to={`/organizations/${item.org.id}/courses`}><IconText type="book" text={item.aggregates.coursesCount} /></Link>,
+                  <Link to={`/organizations/${item.org.id}/users`}><IconText type="user" text={item.aggregates.usersCount}/></Link>
                 ]}
                 extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
               >
                 <List.Item.Meta
-                  title={<Link to={`/organizations/${item.id}/courses`}>{item.name}</Link>}
+                  title={<Link to={`/organizations/${item.org.id}/courses`}>{item.org.name}</Link>}
                   description={"this is the course description"}
                 />
-                {item.name}
+                {item.org.name}
                 <div>
-                  <Link to={`/organizations/edit/${item.id}`}>edit</Link>
+                  <Link to={`/organizations/edit/${item.org.id}`}>edit</Link>
                 </div>
               </List.Item>
             )}

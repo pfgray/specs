@@ -20,6 +20,14 @@ const CoursesForm = () =>
             name: 'name',
             intialValue: '',
             label: 'Name'
+          },{
+            name: 'groupType',
+            intialValue: '',
+            label: 'Type'
+          },{
+            name: 'label',
+            intialValue: '',
+            label: 'Label'
           }],
           afterSuccess: () => {
             route.history.goBack();

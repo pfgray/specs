@@ -1,5 +1,8 @@
 package net.paulgray.specs.client
 
+import java.sql.Timestamp
+import java.time.Instant
+
 import cats.Applicative
 import cats.data.{EitherT, OptionT}
 import cats.effect.IO
@@ -16,12 +19,14 @@ import org.http4s.circe._
 import io.circe.generic.auto._
 import io.circe.syntax._
 import cats.syntax.either._
+import doobie.util.meta.Meta
 import net.paulgray.specs.course.CourseRoutes.orgIsForClient
 import org.http4s.Response
+import io.circe.java8.time.encodeInstant
 
 object OrgRoutes {
 
-  case class CreateOrganizationRequest(name: String)
+  case class CreateOrganizationRequest(name: String, description: String, guid: String, url: String, contactEmail: String)
   implicit val decoder = jsonOf[IO, CreateOrganizationRequest]
 
   case class Orgs[T](organizations: List[T])
@@ -43,7 +48,7 @@ object OrgRoutes {
         (client, req) =>
           for {
             org    <- getOrganization(orgId, client.id)
-            update <- updateOrg(org.id, req.name)
+            update <- updateOrg(org.id, req.name, req.description, req.guid, req.url, req.contactEmail)
           } yield 1
       }
 
@@ -58,13 +63,13 @@ object OrgRoutes {
     case req @ POST -> ApiRoot / "organizations" =>
       withClientAndBody[Int, CreateOrganizationRequest](req) {
         (client, req) =>
-          EitherT(OrgQueries.createOrganization(req.name, client.id).map(_.asRight[IO[Response[IO]]]))
+          EitherT(OrgQueries.createOrganization(req.name, req.description, req.guid, req.url, req.contactEmail, client.id).map(_.asRight[IO[Response[IO]]]))
       }
 
   }
 
-  def updateOrg(orgId: Long, name: String): DbResultResponse[Int] =
-    EitherT(updateOrganization(orgId, name).map(_.asRight[IO[Response[IO]]]))
+  def updateOrg(orgId: Long, name: String, description: String, guid: String, url: String, contactEmail: String): DbResultResponse[Int] =
+    EitherT(updateOrganization(orgId, name, description, guid, url, contactEmail).map(_.asRight[IO[Response[IO]]]))
 
   def getOrganization(orgId: Long, clientId: Long): DbResultResponse[Organization] =
     for {

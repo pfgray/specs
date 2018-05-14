@@ -26,7 +26,7 @@ object CourseRoutes {
 
   import net.paulgray.specs.client.OrgRoutes._
 
-  case class CreateCourseRequest(name: String)
+  case class CreateCourseRequest(name: String, groupType: String, label: String)
   implicit val decoder = jsonOf[IO, CreateCourseRequest]
   case class CoursesResponse(courses: List[Course])
 
@@ -48,7 +48,7 @@ object CourseRoutes {
         (client, req) =>
           for {
             org     <- getOrganization(orgId, client.id)
-            result <- updateCourse(courseId, req.name)
+            result <- updateCourse(courseId, req.name, req.groupType, req.label)
           } yield result
       }
 
@@ -68,7 +68,7 @@ object CourseRoutes {
         (client, req) =>
           for {
             org     <- getOrganization(orgId, client.id)
-            success <- createCourse(req.name, org.id)
+            success <- createCourse(req.name, req.groupType, req.label, org.id)
           } yield success
       }
   }
@@ -76,14 +76,14 @@ object CourseRoutes {
   def getCourse(courseId: Long, orgId: Long): DbResultResponse[Course] =
     OptionT(CourseQueries.getCourse(courseId, orgId).option).toRight(NotFound(s"No course with id: $courseId found in organization: $orgId"))
 
-  def updateCourse(courseId: Long, name: String): DbResultResponse[Int] =
-    EitherT(CourseQueries.updateCourse(courseId, name).map(_.asRight[IO[Response[IO]]]))
+  def updateCourse(courseId: Long, name: String, groupType: String, label: String): DbResultResponse[Int] =
+    EitherT(CourseQueries.updateCourse(courseId, name, groupType, label).map(_.asRight[IO[Response[IO]]]))
 
   def getCourses(orgId: Long): DbResultResponse[List[Course]] =
     EitherT(CourseQueries.getCoursesForOrganization(orgId).map(_.asRight[IO[Response[IO]]]))
 
-  def createCourse(name: String, organization: Long): DbResultResponse[Int] =
-    EitherT(CourseQueries.createCourse(name, organization).map(_.asRight[IO[Response[IO]]]))
+  def createCourse(name: String, groupType: String, label: String, organization: Long): DbResultResponse[Int] =
+    EitherT(CourseQueries.createCourse(name, groupType, label, organization).map(_.asRight[IO[Response[IO]]]))
 
   def orgIsForClient(organization: Organization, clientId: Long): DbResultResponse[Boolean] =
     if (organization.clientId == clientId) {

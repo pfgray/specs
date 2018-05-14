@@ -21,12 +21,28 @@ const OrganizationForm = () =>
             name: 'name',
             intialValue: '',
             label: 'Name'
+          },{
+            name: 'description',
+            intialValue: '',
+            label: 'Description'
+          },{
+            name: 'guid',
+            intialValue: '',
+            label: 'Label'
+          },{
+            name: 'url',
+            intialValue: '',
+            label: 'Url'
+          },{
+            name: 'contactEmail',
+            intialValue: '',
+            label: 'Contact Email'
           }],
           afterSuccess: () => {
             route.history.push('/');
           },
           id: route.match.params.id,
-          ignore: ['id', 'clientId']
+          ignore: ['id', 'clientId', 'createdAt']
         })
       )
     )

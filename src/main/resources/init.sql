@@ -8,15 +8,21 @@ create table if not exists clients (
 );
 
 create table if not exists organizations (
-  id           serial primary key,
-  name         varchar not null,
-  created_at   timestamptz not null default NOW(),
-  client_id    integer not null references clients (id)
+  id            serial primary key,
+  guid          varchar not null,
+  name          varchar not null,
+  description   varchar,
+  url           varchar,
+  contact_email varchar,
+  created_at    timestamptz not null default NOW(),
+  client_id     integer not null references clients (id)
 );
 
 create table if not exists courses (
   id              serial primary key,
   name            varchar not null,
+  group_type      varchar not null,
+  label           varchar not null,
   created_at      timestamptz not null default NOW(),
   organization_id integer not null references organizations (id)
 );

@@ -47,6 +47,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-generic" % "0.9.1",
   // Optional for string interpolation to JSON model
   "io.circe" %% "circe-literal" % "0.9.1",
+  "io.circe" %% "circe-java8" % "0.9.1",
 
   "org.apache.httpcomponents" % "httpclient" % "4.5.3",
   "commons-io" % "commons-io" % "2.5",
