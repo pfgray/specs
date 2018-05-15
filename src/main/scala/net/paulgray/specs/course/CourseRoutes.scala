@@ -13,7 +13,7 @@ import io.circe.generic.auto._
 import net.paulgray.specs.SpecsRoot.{RequestHandler, xa}
 import net.paulgray.specs.client.ClientQueries.Client
 import net.paulgray.specs.client.TokenQueries
-import net.paulgray.specs.course.CourseQueries.Course
+import net.paulgray.specs.course.CourseQueries.{Course, CourseWithAggregate}
 import org.http4s.circe._
 import org.http4s.dsl.io._
 import org.http4s.{EntityDecoder, Request, Response}
@@ -28,7 +28,8 @@ object CourseRoutes {
 
   case class CreateCourseRequest(name: String, groupType: String, label: String)
   implicit val decoder = jsonOf[IO, CreateCourseRequest]
-  case class CoursesResponse(courses: List[Course])
+
+  case class Courses[T](courses: List[T])
 
   def routes: RequestHandler = {
 
@@ -54,12 +55,12 @@ object CourseRoutes {
 
     // list
     case req @ GET -> ApiRoot / "organizations" / LongVar(orgId) / "courses" =>
-      withClient[CoursesResponse](req) {
+      withClient(req) {
         client =>
           for {
             org     <- getOrganization(orgId, client.id)
             courses <- getCourses(org.id)
-          } yield CoursesResponse(courses)
+          } yield Courses(courses)
       }
 
     // create
@@ -79,7 +80,7 @@ object CourseRoutes {
   def updateCourse(courseId: Long, name: String, groupType: String, label: String): DbResultResponse[Int] =
     EitherT(CourseQueries.updateCourse(courseId, name, groupType, label).map(_.asRight[IO[Response[IO]]]))
 
-  def getCourses(orgId: Long): DbResultResponse[List[Course]] =
+  def getCourses(orgId: Long): DbResultResponse[List[CourseWithAggregate]] =
     EitherT(CourseQueries.getCoursesForOrganization(orgId).map(_.asRight[IO[Response[IO]]]))
 
   def createCourse(name: String, groupType: String, label: String, organization: Long): DbResultResponse[Int] =

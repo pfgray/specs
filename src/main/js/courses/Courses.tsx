@@ -4,6 +4,7 @@ import * as axios from 'axios';
 import { List, Icon, Row, Col } from 'antd';
 import { Route, Link } from 'react-router-dom';
 import ItemListLayout from '../layout/ItemListLayout';
+import IconText from '../components/IconText';
 
 import withAuth from '../util/AuthContext';
 import withLoading from '../util/Loadable';
@@ -32,9 +33,22 @@ const Courses = () =>
         <List
           itemLayout="vertical"
           dataSource={courses.data.courses}
-          renderItem={course => (
-            <List.Item actions={[<Link to={`/organizations/${orgId}/courses/${course.id}/edit`}>edit</Link>]}>
-              {course.name}
+          renderItem={({course, aggregates}) => (
+            <List.Item
+              key={course.name}
+              actions={[
+                <Link to={`/organizations/${orgId}/courses/${course.id}/activities`}><IconText type="book" text={aggregates.activityCount} /></Link>,
+                <Link to={`/organizations/${orgId}/courses/${course.id}/enrollments`}><IconText type="user" text={aggregates.enrollmentCount}/></Link>
+              ]}
+            >
+              <List.Item.Meta
+                title={<Link to={`/organizations/${orgId}/courses/${course.id}/activities`}><IconText text={course.name} type="book" /></Link>}
+                description={course.groupType}
+              />
+              <div>{course.label}</div>
+              <div>
+                <Link to={`/organizations/${orgId}/courses/${course.id}/edit`}>edit</Link>
+              </div>
             </List.Item>
           )} />
       </div>

@@ -55,10 +55,12 @@ const Organizations = () =>
                 extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
               >
                 <List.Item.Meta
-                  title={<Link to={`/organizations/${item.org.id}/courses`}>{item.org.name}</Link>}
-                  description={"this is the course description"}
+                  title={<Link to={`/organizations/${item.org.id}/courses`}><IconText text={item.org.name} type="global"/></Link>}
+                  description={<a href={item.org.url}>{item.org.url}</a>}
                 />
-                {item.org.name}
+                <div>{item.org.description}</div>
+                <div>{item.org.guid}</div>
+                <div>{item.org.contactEmail}</div>
                 <div>
                   <Link to={`/organizations/edit/${item.org.id}`}>edit</Link>
                 </div>
