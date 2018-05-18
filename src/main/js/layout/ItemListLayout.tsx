@@ -30,7 +30,7 @@ const ItemListLayout = (props: ItemListLayoutProps) => (
         </Col>
       </Row>
     </Col>
-    <Col className='gutter-row' span={14} offset={5}>
+    <Col className='gutter-row' style={{marginTop: '2rem'}} span={14} offset={5}>
       {props.children}
     </Col>
   </Row>

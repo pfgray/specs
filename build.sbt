@@ -59,11 +59,11 @@ libraryDependencies ++= Seq(
   "com.github.t3hnar" %% "scala-bcrypt" % "3.1",
 
   // doobie for db access
-  "org.tpolecat" %% "doobie-core"      % "0.5.0",
-  "org.tpolecat" %% "doobie-hikari"    % "0.5.0", // HikariCP transactor.
-  "org.tpolecat" %% "doobie-postgres"  % "0.5.0", // Postgres driver 42.2.1 + type mappings.
-  "org.tpolecat" %% "doobie-specs2"    % "0.5.0", // Specs2 support for typechecking statements.
-  "org.tpolecat" %% "doobie-scalatest" % "0.5.0",  // ScalaTest support for typechecking statements.
+  "org.tpolecat" %% "doobie-core"      % "0.5.2",
+  "org.tpolecat" %% "doobie-hikari"    % "0.5.2", // HikariCP transactor.
+  "org.tpolecat" %% "doobie-postgres"  % "0.5.2", // Postgres driver 42.2.1 + type mappings.
+  "org.tpolecat" %% "doobie-specs2"    % "0.5.2", // Specs2 support for typechecking statements.
+  "org.tpolecat" %% "doobie-scalatest" % "0.5.2",  // ScalaTest support for typechecking statements.
 
   "ch.qos.logback" % "logback-classic" % "1.1.5" % "runtime"
 )

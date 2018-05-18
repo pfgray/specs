@@ -15,12 +15,11 @@ import doobie.implicits._
 import net.paulgray.specs.SpecsRoot.RequestHandler
 import net.paulgray.specs.course.CourseQueries
 import net.paulgray.specs.course.CourseQueries.Course
-import net.paulgray.specs.user.UserQueries.User
+import net.paulgray.specs.user.UserQueries.{CreateUserRequest, User}
 import org.http4s.Response
 
 object UserRoutes {
 
-  case class CreateUserRequest(username: String)
   case class UsersResponse(users: Seq[User])
   implicit val decoder = jsonOf[IO, CreateUserRequest]
 
@@ -61,7 +60,7 @@ object UserRoutes {
         (client, req) =>
           for {
             org <- getOrganization(orgId, client.id)
-            success <- createUser(req.username, org.id)
+            success <- createUser(req, org.id)
           } yield success
       }
   }
@@ -75,7 +74,7 @@ object UserRoutes {
   def getUsers(orgId: Long): DbResultResponse[List[User]] =
     EitherT(UserQueries.getUsersForOrganization(orgId).map(_.asRight[IO[Response[IO]]]))
 
-  def createUser(username: String, organization: Long): DbResultResponse[Int] =
-    EitherT(UserQueries.createUser(username, organization).map(_.asRight[IO[Response[IO]]]))
+  def createUser(cur: CreateUserRequest, organization: Long): DbResultResponse[Int] =
+    EitherT(UserQueries.createUser(cur, organization).map(_.asRight[IO[Response[IO]]]))
 
 }

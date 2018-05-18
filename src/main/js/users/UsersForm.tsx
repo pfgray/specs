@@ -8,6 +8,14 @@ import entityForm, { GenericForm } from '../entityForm/EntityForm';
 
 const withRoute = fromRenderProp(Route);
 
+
+//  given
+//  family
+//  full
+//  contact_email_primary
+//  sourcedid
+//  image
+
 const OrganizationForm = () =>
   withAuth
     .chain(token =>
@@ -20,6 +28,30 @@ const OrganizationForm = () =>
             name: 'username',
             intialValue: '',
             label: 'Username'
+          },{
+            name: 'givenName',
+            intialValue: '',
+            label: 'Given Name'
+          },{
+            name: 'familyName',
+            intialValue: '',
+            label: 'Family Name'
+          },{
+            name: 'fullName',
+            intialValue: '',
+            label: 'Full Name'
+          },{
+            name: 'contactEmail',
+            intialValue: '',
+            label: 'Email'
+          },{
+            name: 'sourcedid',
+            intialValue: '',
+            label: 'Sourcedid'
+          },{
+            name: 'image',
+            intialValue: '',
+            label: 'Image Url'
           }],
           afterSuccess: () => {
             route.history.goBack();

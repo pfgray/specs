@@ -11,6 +11,9 @@ import CoursesForm from '../courses/CoursesForm.tsx';
 import Users from '../users/Users.tsx';
 import UsersForm from '../users/UsersForm.tsx';
 
+import Enrollments from '../enrollments/Enrollments.tsx';
+import EnrollmentForm from '../enrollments/EnrollmentForm.tsx';
+
 // #1890ff
 
 const LayoutOut = ({ children }) => (
@@ -39,6 +42,9 @@ const LayoutOut = ({ children }) => (
         <Route exact path='/organizations/:orgId/users' component={Users} />
         <Route exact path='/organizations/:orgId/users/:userId/edit' component={UsersForm} />
         <Route exact path='/organizations/:orgId/users/new' component={UsersForm} />
+
+        <Route exact path='/organizations/:orgId/courses/:courseId/enrollments' component={Enrollments} />
+        <Route exact path='/organizations/:orgId/courses/:courseId/enrollments/new' component={EnrollmentForm} />
         
         {/* <Route path='/users'>users</Route>
       <Route path='/courses'>courses</Route> */}

@@ -30,6 +30,12 @@ create table if not exists courses (
 create table if not exists users (
   id              serial primary key,
   username        varchar not null,
+  given_name      varchar,
+  family_name     varchar,
+  full_name       varchar,
+  contact_email   varchar,
+  sourcedid       varchar,
+  image           varchar,
   created_at      timestamptz not null default NOW(),
   organization_id integer not null references organizations (id)
 );
@@ -39,7 +45,7 @@ create table if not exists enrollments (
   created_at timestamptz not null default NOW(),
   role       varchar not null,
   user_id    integer not null references users (id),
-  course_id  integer not null references organizations (id),
+  course_id  integer not null references courses (id),
   unique(user_id, course_id)
 );
 
