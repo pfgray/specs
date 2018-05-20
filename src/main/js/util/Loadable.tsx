@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { fromRenderProp } from 'chainable-components';
-import * as lscache from 'lscache';
+import { fromRenderProp, withPromise, ChainableComponent } from 'chainable-components';
 
 const LoadIcon = () => (
   <svg width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#1890ff">
@@ -22,9 +21,27 @@ const LoadIcon = () => (
   </svg>
 );
 
-const Loadable = (props: any) => {
-  console.log('got props:', props);
+type LoadableProps<A> = LoadableData<A> & {
+  children: (a: A) => React.ReactNode
+};
+
+type LoadableData<T> = {
+  loading: true
+} | {
+  loading: false,
+  data: T
+};
+
+export function Loadable<A>(props: LoadableProps<A>): React.ReactNode {
   return props.loading ? <LoadIcon /> : props.children(props.data);
+};
+
+export function withLoadablePromise<A>(config: () => Promise<A>): ChainableComponent<A> {
+  console.log('hmm, ', config)
+  return withPromise({get: config}).chain(req => {
+    console.log('Got loadable: ', req);
+    return withLoadable(req);
+  });
 };
 
 const withLoadable = fromRenderProp(Loadable);

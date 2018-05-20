@@ -36,7 +36,7 @@ object EnrollmentQueries {
     sql"""
          select u.id, u.username, u.given_name, u.family_name, u.full_name, u.contact_email, u.sourcedid, u.image, u.organization_id
            from users u
-         where u.id not in (
+         where u.i not in (
            select e.user_id from enrollments e
              where e.course_id = $courseId
          )

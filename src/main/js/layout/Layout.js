@@ -14,43 +14,15 @@ import UsersForm from '../users/UsersForm.tsx';
 import Enrollments from '../enrollments/Enrollments.tsx';
 import EnrollmentForm from '../enrollments/EnrollmentForm.tsx';
 
+import SpecsLayout from './SpecsLayout.tsx';
+import OrganizationLayout from './OrganizationLayout.tsx';
 // #1890ff
 
 const LayoutOut = ({ children }) => (
-  <Layout style={{ minHeight: '100vh' }}>
-    <Sider collapsible>
-      <h1 className='logo' style={{ color: '#fff', padding: '1rem' }}>Specs.</h1>
-      <Menu theme="dark" mode="inline" >
-        <Menu.Item key="1"><Link to='/'><Icon type={'global'} style={{ marginRight: 8 }} />Organizations</Link></Menu.Item>
-        <Menu.Item key="2"><Link to='/launches'><Icon type={'code-o'} style={{ marginRight: 8 }} />Launches</Link></Menu.Item>
-        <Menu.Item key="3"><Link to='/users'><Icon type={'user'} style={{ marginRight: 8 }} />Users</Link></Menu.Item>
-        <Menu.Item key="4"><Link to='/courses'><Icon type={'book'} style={{ marginRight: 8 }} />Courses</Link></Menu.Item>
-      </Menu>
-    </Sider>
-    <Layout>
-      <Content>
-        <Route exact path='/' component={Organizations} />
-        <Route exact path='/organizations/new' component={OrganizationForm} />
-        <Route exact path='/organizations/edit/:id' component={OrganizationForm} />
-        <Route path='/launches' component={() => <span>launches</span>} />
-        <Route path='/users' component={() => <span>users</span>} />
-
-        <Route exact path='/organizations/:orgId/courses' component={Courses} />
-        <Route exact path='/organizations/:orgId/courses/:courseId/edit' component={CoursesForm} />
-        <Route exact path='/organizations/:orgId/courses/new' component={CoursesForm} />
-
-        <Route exact path='/organizations/:orgId/users' component={Users} />
-        <Route exact path='/organizations/:orgId/users/:userId/edit' component={UsersForm} />
-        <Route exact path='/organizations/:orgId/users/new' component={UsersForm} />
-
-        <Route exact path='/organizations/:orgId/courses/:courseId/enrollments' component={Enrollments} />
-        <Route exact path='/organizations/:orgId/courses/:courseId/enrollments/new' component={EnrollmentForm} />
-        
-        {/* <Route path='/users'>users</Route>
-      <Route path='/courses'>courses</Route> */}
-      </Content>
-    </Layout>
-  </Layout>
+  <div>
+    <Route exact path="/(|organizations/new|organizations/edit/:id)" component={SpecsLayout}/>
+    <Route exact path="/organizations/:orgId/*" component={OrganizationLayout}/>
+  </div>
 );
 
 
