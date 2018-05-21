@@ -57,7 +57,7 @@ const OrganizationForm = () =>
             route.history.goBack();
           },
           id: route.match.params.userId,
-          ignore: ['id', 'organizationId']
+          ignore: ['id', 'organizationId', 'createdAt']
         })
       )
     )

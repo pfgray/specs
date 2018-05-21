@@ -1,12 +1,37 @@
 import axios from 'axios';
 
+export type Id = number | string
+
 export type Organization = {id: number, name: string};
 
-export function getOrganization(id: string | number, token: string): Promise<Organization> {
+export function getOrganization(id: Id, token: string): Promise<Organization> {
   return axios.get(`/api/organizations/${id}`, {
     headers: { Authorization: token }
   }).then(resp => {
     console.log('got response back: ', resp)
     return resp.data as Organization
+  });
+}
+
+export type Activity = {
+  id: number,
+  name: string,
+  resourceLinkId: string,
+  url: string,
+  oauthkey: string,
+  oauthSecret: string,
+  signatureMechanism: string,
+  graded: boolean,
+  courseId: number
+};
+
+export type ActivityList = { activities: Activity[] }
+
+export function getActivities(orgId: Id, courseId: Id, token: string): Promise<ActivityList> {
+  return axios.get(`/api/organizations/${orgId}/courses/${courseId}/activities`, {
+    headers: { Authorization: token }
+  }).then(resp => {
+    console.log('got response back: ', resp)
+    return resp.data as ActivityList
   });
 }

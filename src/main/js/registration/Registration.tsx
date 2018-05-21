@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Launches = () => (
+const Registration = () => (
   <div>registration, yo</div>
 );
 
-export default Launches;
+export default Registration;

@@ -3,8 +3,10 @@ import React from 'react';
 import { Layout, Menu, Icon } from 'antd';
 const { Content, Sider } = Layout;
 import { Link, Route } from 'react-router-dom';
-import Organizations from '../organizations/Organizations.tsx';
-import OrganizationForm from '../organizations/OrganizationForm.tsx';
+import Organizations from '../organizations/Organizations';
+import OrganizationForm from '../organizations/OrganizationForm';
+import Apps from '../apps/Apps';
+import Register from '../apps/RegistrationForm';
 
 
 const SpecsLayout = (() => (
@@ -19,6 +21,8 @@ const SpecsLayout = (() => (
     <Layout>
       <Content>
         <Route exact path='/' component={Organizations} />
+        <Route exact path='/apps' component={Apps} />
+        <Route exact path='/apps/register' component={Register} />
         <Route exact path='/organizations/new' component={OrganizationForm} />
         <Route exact path='/organizations/edit/:id' component={OrganizationForm} />
       </Content>

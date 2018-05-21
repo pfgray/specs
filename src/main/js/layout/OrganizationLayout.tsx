@@ -12,8 +12,10 @@ import UsersForm from '../users/UsersForm';
 import Enrollments from '../enrollments/Enrollments';
 import EnrollmentForm from '../enrollments/EnrollmentForm';
 import withAuth from '../util/AuthContext';
+import Activities from '../activities/Activities';
+import ActivityForm from '../activities/ActivityForm';
 
-import { getOrganization, Organization } from '../resources';
+import { getOrganization } from '../resources';
 import { withLoadablePromise } from '../util/Loadable';
 
 const isSelected = (routeLike: string, route: RouteComponentProps<{}>) => {
@@ -21,7 +23,6 @@ const isSelected = (routeLike: string, route: RouteComponentProps<{}>) => {
   console.log('isMstching?', !!route.match.url.match(routeLike));
   return route.match.url.match(routeLike) ? "ant-menu-item-selected": "";
 }
-
 
 const withRoute = fromRenderProp(Route);
 
@@ -55,6 +56,11 @@ const OrganizationLayout = () =>
 
           <Route exact path='/organizations/:orgId/courses/:courseId/enrollments' component={Enrollments} />
           <Route exact path='/organizations/:orgId/courses/:courseId/enrollments/new' component={EnrollmentForm} />
+
+          <Route exact path='/organizations/:orgId/courses/:courseId/activities' component={Activities} />
+          <Route exact path='/organizations/:orgId/courses/:courseId/activities/new' component={ActivityForm} />
+          <Route exact path='/organizations/:orgId/courses/:courseId/activities/:activityId/edit' component={ActivityForm} />
+          
         </Content>
       </Layout>
     </Layout>

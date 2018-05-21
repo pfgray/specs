@@ -12,6 +12,7 @@ import net.paulgray.specs.client.TokenQueries
 import org.http4s.circe._
 import org.http4s.dsl.io._
 import org.http4s.{EntityDecoder, Request, Response}
+import cats.syntax.either._
 
 object RequestUtil {
 
@@ -57,5 +58,10 @@ object RequestUtil {
 
         result.flatMap(identity).flatMap(identity)
     }
+
+  implicit class ConnectionIOOps[A](c: ConnectionIO[A]) {
+    def toRightResp: DbResultResponse[A] =
+      EitherT(c.map(_.asRight[IO[Response[IO]]]))
+  }
 
 }

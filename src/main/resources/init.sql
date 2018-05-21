@@ -50,9 +50,16 @@ create table if not exists enrollments (
 );
 
 create table if not exists activities (
-  id           serial primary key,
-  created_at   timestamptz not null default NOW(),
-  course_id    integer not null references organizations (id)
+  id                   serial primary key,
+  resource_id          varchar not null,
+  name                 varchar not null,
+  url                  varchar not null,
+  oauth_key            varchar not null,
+  oauth_secret         varchar not null,
+  signature_mechanism  varchar not null,
+  graded               boolean not null,
+  created_at           timestamptz not null default NOW(),
+  course_id            integer not null references courses (id)
 );
 
 create table if not exists tokens (

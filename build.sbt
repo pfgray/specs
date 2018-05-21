@@ -44,10 +44,11 @@ libraryDependencies ++= Seq(
 
   "org.http4s" %% "http4s-circe" % http4sVersion,
   // Optional for auto-derivation of JSON codecs
-  "io.circe" %% "circe-generic" % "0.9.1",
+  "io.circe" %% "circe-generic" % "0.9.3",
   // Optional for string interpolation to JSON model
-  "io.circe" %% "circe-literal" % "0.9.1",
-  "io.circe" %% "circe-java8" % "0.9.1",
+  "io.circe" %% "circe-literal" % "0.9.3",
+  "io.circe" %% "circe-java8" % "0.9.3",
+  "io.circe" %% "circe-parser" % "0.9.3",
 
   "org.apache.httpcomponents" % "httpclient" % "4.5.3",
   "commons-io" % "commons-io" % "2.5",

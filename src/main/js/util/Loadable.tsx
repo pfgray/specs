@@ -37,9 +37,7 @@ export function Loadable<A>(props: LoadableProps<A>): React.ReactNode {
 };
 
 export function withLoadablePromise<A>(config: () => Promise<A>): ChainableComponent<A> {
-  console.log('hmm, ', config)
   return withPromise({get: config}).chain(req => {
-    console.log('Got loadable: ', req);
     return withLoadable(req);
   });
 };
