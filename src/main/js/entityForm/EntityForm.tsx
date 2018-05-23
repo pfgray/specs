@@ -21,7 +21,7 @@ type EntityFormConfig = {
   id?: number,
   values: FormValue[],
   ignore: string[],
-  afterSuccess: () => void
+  afterSuccess: (a?: any) => void
 };
 
 export default (config: EntityFormConfig) => {
@@ -39,7 +39,7 @@ export default (config: EntityFormConfig) => {
 
         req.then(resp => {
           actions.setSubmitting(false);
-          config.afterSuccess();
+          config.afterSuccess(resp);
         });
       }
     }).map(formik => ([formik, config]));

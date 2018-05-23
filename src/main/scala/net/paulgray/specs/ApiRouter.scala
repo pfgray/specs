@@ -15,7 +15,8 @@ import org.http4s.dsl.io._
 import org.http4s.circe._
 import SpecsRoot.pfSemigroup
 import cats.implicits._
-import net.paulgray.specs.client.{OrgRoutes, SessionRoutes}
+import net.paulgray.specs.client.{AppRoutes, OrgRoutes, SessionRoutes}
+import net.paulgray.specs.core.KeypairRoutes
 import net.paulgray.specs.course.{ActivityRoutes, CourseRoutes}
 import net.paulgray.specs.enrollment.EnrollmentRoutes
 import net.paulgray.specs.user.UserRoutes
@@ -36,7 +37,9 @@ object ApiRouter {
       UserRoutes.routes |+|
       CourseRoutes.routes |+|
       EnrollmentRoutes.routes |+|
-      ActivityRoutes.routes |+| {
+      ActivityRoutes.routes |+|
+      AppRoutes.routes |+|
+      KeypairRoutes.routes |+| {
       case GET -> ApiRoot / "test" =>
         IO(Response(Status.Ok))
       case GET -> ApiRoot / "statistics" =>

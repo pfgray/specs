@@ -35,3 +35,23 @@ export function getActivities(orgId: Id, courseId: Id, token: string): Promise<A
     return resp.data as ActivityList
   });
 }
+
+export type App = {
+  id: number,
+  name: String,
+  logo: String,
+  publicKey: String
+};
+
+export type AppList = {
+  apps: App[]
+};
+
+export function getApps(token: string): Promise<ActivityList> {
+  return axios.get(`/api/apps`, {
+    headers: { Authorization: token }
+  }).then(resp => {
+    console.log('got response back: ', resp)
+    return resp.data as AppList
+  });
+}

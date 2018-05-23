@@ -68,3 +68,20 @@ create table if not exists tokens (
   created_at  timestamptz not null default NOW(),
   client_id   integer not null references clients (id)
 );
+
+create table if not exists apps (
+  id          serial primary key,
+  name        varchar not null,
+  logo        varchar,
+  public_key  varchar not null,
+
+  created_at  timestamptz not null default NOW(),
+  client_id   integer not null references clients(id)
+);
+
+create table if not exists keypairs (
+  id          serial primary key,
+  public_key  varchar not null,
+  private_key varchar not null,
+  created_at  timestamptz not null default NOW()
+);
