@@ -1,7 +1,14 @@
 package net.paulgray.specs.client
 
+import java.security.KeyFactory
+import java.security.interfaces.{RSAPrivateKey, RSAPublicKey}
+import java.security.spec.PKCS8EncodedKeySpec
+
 import cats.data.OptionT
 import cats.effect.IO
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.RSAKeyProvider
 import doobie.implicits._
 import io.circe.Encoder
 import net.paulgray.specs.ApiRouter.ApiRoot
@@ -20,6 +27,17 @@ import io.circe.generic.auto._
 import io.circe.java8.time.encodeInstant
 import net.paulgray.specs.RequestUtil
 import net.paulgray.specs.client.AppQueries.{AppOut, CreateAppRequest}
+import net.paulgray.specs.core.{KeyQueries, KeypairService, LaunchService}
+import net.paulgray.specs.core.LaunchService.LaunchAppRequest
+import org.apache.commons.codec.binary.Base64
+import java.security.PublicKey
+import java.security.spec.EncodedKeySpec
+import java.security.spec.X509EncodedKeySpec
+import javax.xml.crypto.dsig.SignatureMethod
+
+import KeyQueries._
+import LaunchAppRequest._
+import io.jsonwebtoken.SignatureAlgorithm
 
 object AppRoutes {
 
@@ -27,8 +45,10 @@ object AppRoutes {
   import AppQueries.App
 
   case class Apps[T](apps: List[T])
+  case class IdTokenResponse(idToken: String)
 
   implicit val decoder = jsonOf[IO, CreateAppRequest]
+  implicit val decoderLaunchApp = jsonOf[IO, LaunchAppRequest]
 
   def routes: RequestHandler = {
 
@@ -67,6 +87,42 @@ object AppRoutes {
             app <- createApp(req, client.id)
           } yield app
       }
+
+    // launch
+    case req @ POST -> ApiRoot / "apps" / LongVar(appId) / "launch" =>
+      withClientAndBody[IdTokenResponse, LaunchAppRequest](req) {
+        (client, req) =>
+          for {
+            idToken <- generateLaunch()
+          } yield IdTokenResponse(idToken)
+      }
+
+    case req @ GET -> ApiRoot / "apps" / LongVar(appId) / "launch" =>
+      withClient(req) {
+        client =>
+          for {
+            idToken <- generateLaunch()
+          } yield IdTokenResponse(idToken)
+      }
+  }
+
+  def generateLaunch(): DbResultResponse[String] = {
+
+    val res = for {
+      keys <- KeyQueries.getAllKeypairs
+    } yield {
+      val key = keys.head
+      val (privKey, pubKey) = key.buildKeys
+
+      LaunchService
+        .constructLaunchToken()
+        .toJWT(issuer = "https://paulgray.net", audience = "martin")
+        .setHeaderParam("kid", key.id.toString)
+        .signWith(SignatureAlgorithm.RS256, privKey)
+        .compact()
+    }
+
+    res.toRightResp
   }
 
   def getAllApps: DbResultResponse[List[App]] =

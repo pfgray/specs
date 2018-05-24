@@ -25,7 +25,10 @@ const Apps = () =>
           itemLayout="vertical"
           dataSource={apps}
           renderItem={(app) => (
-            <pre>{JSON.stringify(app, null, 2)}</pre>
+            <div>
+              <pre>{JSON.stringify(app, null, 2)}</pre>
+              <Link to={`/apps/${app.id}/launch`} className="ant-btn ant-btn-primary">Launch this app</Link>
+            </div>
           )} />
       </div>
     </ItemListLayout>

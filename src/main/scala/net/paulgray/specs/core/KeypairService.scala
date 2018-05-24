@@ -10,13 +10,11 @@ object KeypairService {
 
   private val UTF8_CHARSET = Charset.forName("UTF-8")
 
-  def decodeUTF8(bytes: Array[Byte]) = new String(bytes, UTF8_CHARSET)
-
-  def encodeUTF8(string: String): Array[Byte] = string.getBytes(UTF8_CHARSET)
+  val ALG = "RSA"
 
   def generateKeypair(): KeyPair = {
-    val keyGen = KeyPairGenerator.getInstance("RSA")
-    keyGen.initialize(512)
+    val keyGen = KeyPairGenerator.getInstance(ALG)
+    keyGen.initialize(2048)
     keyGen.genKeyPair()
   }
 

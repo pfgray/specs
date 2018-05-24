@@ -12,6 +12,7 @@ import doobie.util.fragment.Fragment
 import doobie._
 import net.paulgray.specs.core.{KeyQueries, KeypairService}
 import net.paulgray.specs.core.KeypairService._
+import org.apache.commons.codec.binary.Base64
 
 object SpecsServer extends StreamApp[IO] {
 
@@ -29,13 +30,30 @@ object SpecsServer extends StreamApp[IO] {
 
     val init = Fragment.const(Source.fromResource("init.sql").getLines().mkString("\n"))
 
-
-
-    val (privateKey, publicKey) = KeypairService.generateKeypair().getEncoded
+    val keypair = KeypairService.generateKeypair()
+    println(
+      s"""
+         |Private Key: ${keypair.getPrivate.getAlgorithm} ~> ${keypair.getPrivate.getFormat}
+         |  Bytes:
+         |${new String(keypair.getPrivate.getEncoded)}
+         |Base64 encoded:
+         |${Base64.encodeBase64String(keypair.getPrivate.getEncoded)}
+         |Reverse reverse:
+         |${new String(Base64.decodeBase64(Base64.encodeBase64String(keypair.getPrivate.getEncoded)))}
+         |
+         |
+         |{Public Key: ${keypair.getPublic.getAlgorithm} ~> ${keypair.getPublic.getFormat}
+         |  Bytes:
+         |${new String(keypair.getPublic.getEncoded)}
+         |Base64 encoded:
+         |${Base64.encodeBase64String(keypair.getPublic.getEncoded)}
+         |Reverse reverse:
+         |${new String(Base64.decodeBase64(Base64.encodeBase64String(keypair.getPublic.getEncoded)))}
+       """.stripMargin)
+    val (privateKey, publicKey) = keypair.getEncoded
     val addKey = KeyQueries.createKeypair(privateKey, publicKey)
 
     addKey.transact(xa).unsafeRunSync()
-
 
     init.updateWithLogHandler(LogHandler.jdkLogHandler).run.transact(xa).unsafeRunSync()
   }

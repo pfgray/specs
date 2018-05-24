@@ -1,5 +1,7 @@
 package net.paulgray.specs.core
 
+import java.security.interfaces.RSAPublicKey
+
 import cats.data.OptionT
 import cats.effect.IO
 import doobie.implicits._
@@ -22,24 +24,33 @@ import net.paulgray.specs.RequestUtil
 import net.paulgray.specs.client.AppQueries.{AppOut, CreateAppRequest}
 import net.paulgray.specs.RequestUtil._
 import net.paulgray.specs.core.KeyQueries.Keypair
+import org.apache.commons.codec.binary.Base64
+import com.nimbusds.jose.jwk.RSAKey
+import io.circe.parser._
 
 object KeypairRoutes {
 
-  case class JWK(
-    e: String,
-    use: String,
-    alg: String,
-    kty: String,
-    n: String,
-    kid: String
-  )
-
   object JWK {
-    def fromKeypair(keypair: Keypair): JWK = {
-      new JWK("AQAB", "sig", "RS256", "RSA", keypair.publicKey, keypair.id.toString)
+    def fromKeypair(keypair: Keypair): RSAKey = {
+      val pub = Base64.decodeBase64(keypair.publicKey)
+      val (_, publicKey) = keypair.buildKeys
+      // Convert to JWK format// Convert to JWK format
+
+      val jwk = new RSAKey.Builder(publicKey.asInstanceOf[RSAPublicKey]).keyID(keypair.id.toString).build()
+
+
+      jwk
+
+      // Builder(keyPair.getPublic.asInstanceOf[RSAPublicKey]).privateKey(keyPair.getPrivate.asInstanceOf[RSAPrivateKey]).keyID(UUID.randomUUID.toString).build // Give the key some ID (optional)
+
+      // new JWK("AQAB", "sig", "RS256", "RSA", Base64.encodeBase64URLSafeString(pub), keypair.id.toString)
     }
   }
-  case class JWKSet(keys: List[JWK])
+  case class JWKSet(keys: List[RSAKey])
+
+  implicit val encodeRSAKey: Encoder[RSAKey] = new Encoder[RSAKey] {
+    final def apply(a: RSAKey): Json = parse(a.toJSONString).right.get
+  }
 
   def routes: RequestHandler = {
 
@@ -53,9 +64,20 @@ object KeypairRoutes {
         case Left(r) => r
         case Right(ent) => Ok(ent.asJson)
       }).flatMap(identity)
+
+    // list all encoded
+    case req @ GET -> ApiRoot / "keysOld" =>
+      val resp = (for {
+        keys <- getAllKeys
+      } yield JWKSet(keys)).value.transact(xa)
+
+      resp.map({
+        case Left(r) => r
+        case Right(ent) => Ok(ent.asJson)
+      }).flatMap(identity)
   }
 
-  def getAllKeys: DbResultResponse[List[JWK]] =
+  def getAllKeys: DbResultResponse[List[RSAKey]] =
     KeyQueries.getAllKeypairs.map(keys => {
       keys.map(JWK.fromKeypair)
     }).toRightResp

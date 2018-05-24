@@ -49,6 +49,7 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-literal" % "0.9.3",
   "io.circe" %% "circe-java8" % "0.9.3",
   "io.circe" %% "circe-parser" % "0.9.3",
+  "io.circe" %% "circe-generic-extras" % "0.9.3",
 
   "org.apache.httpcomponents" % "httpclient" % "4.5.3",
   "commons-io" % "commons-io" % "2.5",
@@ -66,7 +67,12 @@ libraryDependencies ++= Seq(
   "org.tpolecat" %% "doobie-specs2"    % "0.5.2", // Specs2 support for typechecking statements.
   "org.tpolecat" %% "doobie-scalatest" % "0.5.2",  // ScalaTest support for typechecking statements.
 
-  "ch.qos.logback" % "logback-classic" % "1.1.5" % "runtime"
+  "ch.qos.logback" % "logback-classic" % "1.1.5" % "runtime",
+
+  "io.jsonwebtoken" % "jjwt" % "0.9.0",
+  "com.auth0" % "java-jwt" % "3.3.0",
+
+  "com.nimbusds" % "nimbus-jose-jwt" % "4.3.1"
 )
 
 enablePlugins(SbtTwirl, WebpackPlugin)
