@@ -63,7 +63,7 @@ object LaunchService {
       aud = "",
       iat = (Instant.now.toEpochMilli / 1000).toString,
       exp = (Instant.now.plus(java.time.Duration.ofSeconds(60)).toEpochMilli / 1000).toString,
-      sub = "",
+      sub = "bueller?",
       nonce = UUID.randomUUID().toString
     )
   }
@@ -126,7 +126,6 @@ object LaunchService {
 
   implicit class LtiJsonLaunchOps(jsonLaunch: LtiJsonLaunch) {
     def toJWT(issuer: String, audience: String): JwtBuilder = {
-
       Jwts.builder()
         .setPayload(jsonLaunch.copy(iss = issuer, aud = audience).asJson.toString)
     }

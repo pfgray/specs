@@ -116,7 +116,7 @@ object AppRoutes {
 
       LaunchService
         .constructLaunchToken()
-        .toJWT(issuer = "https://paulgray.net", audience = "martin")
+        .toJWT(issuer = "https://paulgray.net", audience = "chuck")
         .setHeaderParam("kid", key.id.toString)
         .signWith(SignatureAlgorithm.RS256, privKey)
         .compact()
