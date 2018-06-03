@@ -1,30 +1,37 @@
 import * as React from 'react';
 
 import { List, Icon, Row, Col, Button, Card, Select } from 'antd';
-import { Users } from '../entities';
+import { Contexts } from '../entities';
 import { Entry, MessageTypes } from '../AppLaunch';
 
 import './launch-form.less';
 
-
-const updateContextType = (formState) => (mt) => {
-  formState.update({
-    ...formState.data,
-    context_type: mt
-  });
+const changeContext = (formState: any, updateField: any) => label => {
+  const newContext = Contexts.find(c => c.label === label);
+  if (newContext) {
+    formState.update({
+      ...formState.data,
+      ...newContext
+    });
+    updateField(formState, 'context_id')(newContext.context_id);
+  }
 }
-
-const handleChange = (hmm) => {
-  console.log('Handling change:', hmm);
-}
-
-const LaunchContextForm = ({ updateField, formState, contextTypes }) => (
+const LaunchContextForm = ({ updateField, formState, contextTypes, refreshToken }) => (
   <Card>
-    <h4>Context</h4>
+    <div className="form-card-header">
+      <h4>Context</h4>
+      <Select defaultValue={Contexts[0].label} style={{ width: 200 }} onChange={changeContext(formState, updateField)}>
+        {Contexts.map(context => (
+          <Select.Option value={context.label} key={context.label}>
+            {context.label}
+          </Select.Option>
+        ))}
+      </Select>
+    </div>
 
-    <Entry attr="context_id" formState={formState} />
-    <Entry attr="context_label" formState={formState} />
-    <Entry attr="context_title" formState={formState} />
+    <Entry attr="context_id" formState={formState} updateField={updateField} />
+    <Entry attr="context_label" formState={formState} updateField={updateField} />
+    <Entry attr="context_title" formState={formState} updateField={updateField} />
 
     <div className="ant-row ant-form-item">
       <Col sm={{ span: 7, offset: 1 }} className="ant-form-item-label">
@@ -35,13 +42,17 @@ const LaunchContextForm = ({ updateField, formState, contextTypes }) => (
           mode="multiple"
           style={{ width: '100%' }}
           defaultValue={formState.data.context_type}
-          onChange={updateContextType(formState)}
+          onChange={updateField(formState, 'context_type')}
         >
           {contextTypes.map(ct => <Select.Option value={ct} key={ct}>{ct}</Select.Option>)}
         </Select>
       </Col>
 
     </div>
+
+    <Entry attr="resource_link_id" formState={formState} updateField={updateField}/>
+    <Entry attr="resource_link_title" formState={formState} updateField={updateField} />
+    <Entry attr="resource_link_description" formState={formState} updateField={updateField} />
 
     {/* CourseTemplate
 CourseOffering

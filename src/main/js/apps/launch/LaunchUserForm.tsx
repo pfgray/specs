@@ -4,38 +4,33 @@ import { List, Icon, Row, Col, Button, Card, Select } from 'antd';
 import { Users } from '../entities';
 import { Entry } from '../AppLaunch';
 
-const changeUser = (formState: any) => guid => {
+const changeUser = (formState: any, updateField: any, refreshToken: any) => guid => {
   const newUser = Users.find(u => u.guid === guid);
-  console.log('found:', newUser);
   if (newUser) {
-    formState.update({
+    const newFormState = {
       ...formState.data,
-      given_name: newUser.given_name,
-      family_name: newUser.family_name,
-      middle_name: "",
-      picture: newUser.picture,
-      email: newUser.email,
-      full_name: newUser.label,
-      roles: newUser.roles
-    })
+      ...newUser
+    };
+    formState.update(newFormState);
+    refreshToken(newFormState);
   }
 }
 
-const LaunchUserForm = ({ updateField, formState }) => (
+const LaunchUserForm = ({ updateField, formState, refreshToken }) => (
   <Card style={{ padding: '.5rem' }}>
     <div className="form-card-header">
       <h4>User</h4>
-      <Select defaultValue={Users[0].guid} style={{ width: 200 }} onChange={changeUser(formState)}>
+      <Select defaultValue={Users[0].guid} style={{ width: 200 }} onChange={changeUser(formState, updateField, refreshToken)}>
         {Users.map(user => (
           <Select.Option value={user.guid} key={user.guid}>
-            {user.label}
+            {user.full_name}
           </Select.Option>
         ))}
       </Select>
     </div>
-    <Entry attr="given_name" formState={formState} />
-    <Entry attr="family_name" formState={formState} />
-    <Entry attr="middle_name" formState={formState} />
+    <Entry attr="given_name" formState={formState} updateField={updateField} />
+    <Entry attr="family_name" formState={formState} updateField={updateField} />
+    <Entry attr="middle_name" formState={formState} updateField={updateField} />
     <div className="ant-row">
       <div className="ant-form-item">
         <Col sm={{ span: 8 }} className="ant-form-item-label">
@@ -49,9 +44,9 @@ const LaunchUserForm = ({ updateField, formState }) => (
         </Col>
       </div>
     </div>
-    <Entry attr="email" formState={formState} />
-    <Entry attr="full_name" formState={formState} />
-    <Entry attr="roles" formState={formState} />
+    <Entry attr="email" formState={formState} updateField={updateField}/>
+    <Entry attr="full_name" formState={formState} updateField={updateField}/>
+    <Entry attr="roles" formState={formState} updateField={updateField}/>
   </Card>
 );
 

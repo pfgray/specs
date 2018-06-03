@@ -18,10 +18,12 @@ import ActivityForm from '../activities/ActivityForm';
 import { getOrganization } from '../resources';
 import { withLoadablePromise } from '../util/Loadable';
 
-const isSelected = (routeLike: string, route: RouteComponentProps<{}>) => {
-  console.log('isSelected:', route.location.pathname)
-  console.log('isMstching?', !!route.match.url.match(routeLike));
-  return route.match.url.match(routeLike) ? "ant-menu-item-selected": "";
+const matchPath = (path: string) => {
+  if(path.match("/organizations/.*/courses*")) {
+    return "courses";
+  } else if(path.match("/organizations/.*/users*")) {
+    return "users";
+  }
 }
 
 const withRoute = fromRenderProp(Route);
@@ -35,11 +37,11 @@ const OrganizationLayout = () =>
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible style={{ background: '#fff' }}>
         <h1 className='logo' style={{ padding: '1rem' }}>{org.name}</h1>
-        <Menu theme="light" mode="inline" >
-          <Menu.Item key="1" className={isSelected(`/organizations/${org.id}/courses*`, route)}>
+        <Menu theme="light" mode="inline" activeKey={matchPath(route.location.pathname)} selectedKeys={[matchPath(route.location.pathname)]} >
+          <Menu.Item key="courses">
             <Link to={`/organizations/${org.id}/courses`}><Icon type={'book'} style={{ marginRight: 8 }}/>Courses</Link>
           </Menu.Item>
-          <Menu.Item key="2" className={isSelected(`/organizations/${org.id}/users*`, route)}>
+          <Menu.Item key="users">
             <Link to={`/organizations/${org.id}/users`}><Icon type={'user'} style={{ marginRight: 8 }} />Users</Link>
           </Menu.Item>
         </Menu>

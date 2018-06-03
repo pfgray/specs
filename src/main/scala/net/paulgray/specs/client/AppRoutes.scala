@@ -89,25 +89,16 @@ object AppRoutes {
       }
 
     // launch
-    case req @ POST -> ApiRoot / "apps" / LongVar(appId) / "launch" =>
+    case req @ POST -> ApiRoot / "apps" / "launch" =>
       withClientAndBody[IdTokenResponse, LaunchAppRequest](req) {
         (client, req) =>
           for {
-            idToken <- generateLaunch()
-          } yield IdTokenResponse(idToken)
-      }
-
-    case req @ GET -> ApiRoot / "apps" / LongVar(appId) / "launch" =>
-      withClient(req) {
-        client =>
-          for {
-            idToken <- generateLaunch()
+            idToken <- generateLaunch(req)
           } yield IdTokenResponse(idToken)
       }
   }
 
-  def generateLaunch(): DbResultResponse[String] = {
-
+  def generateLaunch(lar: LaunchAppRequest): DbResultResponse[String] = {
     val res = for {
       keys <- KeyQueries.getAllKeypairs
     } yield {
@@ -115,8 +106,8 @@ object AppRoutes {
       val (privKey, pubKey) = key.buildKeys
 
       LaunchService
-        .constructLaunchToken()
-        .toJWT(issuer = "https://paulgray.net", audience = "chuck")
+        .constructLaunchToken(lar)
+        .toJWT(issuer = "https://specs.paulgray.net", audience = "tool")
         .setHeaderParam("kid", key.id.toString)
         .signWith(SignatureAlgorithm.RS256, privKey)
         .compact()

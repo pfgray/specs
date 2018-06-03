@@ -8,15 +8,29 @@ import OrganizationForm from '../organizations/OrganizationForm';
 import Apps from '../apps/Apps';
 import AppLaunch from '../apps/AppLaunch';
 import Register from '../apps/RegistrationForm';
+import { fromRenderProp } from 'chainable-components';
 
-const SpecsLayout = (() => (
+const withRoute = fromRenderProp(Route);
+
+const matchPath = (path: string) => {
+  if(path === "/" || path.match("/organizations*")) {
+    return "orgs";
+  } else if(path.match("/apps*")) {
+    return "apps";
+  } else if(path.match("/launch*")) {
+    return "launch";
+  }
+}
+
+const SpecsLayout = () => 
+withRoute({}).ap(route => (
   <Layout style={{ minHeight: '100vh' }}>
     <Sider collapsible>
       <h1 className='logo' style={{ color: '#fff', padding: '1rem' }}>Specs.</h1>
-      <Menu theme="dark" mode="inline" >
-        <Menu.Item key="1"><Link to='/'><Icon type={'global'} style={{ marginRight: 8 }} />Organizations</Link></Menu.Item>
-        <Menu.Item key="2"><Link to='/apps'><Icon type={'appstore'} style={{ marginRight: 8 }} />Apps</Link></Menu.Item>
-        <Menu.Item key="3"><Link to='/launch'><Icon type={'code-o'} style={{ marginRight: 8 }} />Launch</Link></Menu.Item>
+      <Menu theme="dark" mode="inline" activeKey={matchPath(route.location.pathname)} selectedKeys={[matchPath(route.location.pathname)]}>
+        <Menu.Item key="orgs"><Link to='/'><Icon type={'global'} style={{ marginRight: 8 }} />Organizations</Link></Menu.Item>
+        <Menu.Item key="apps"><Link to='/apps'><Icon type={'appstore'} style={{ marginRight: 8 }} />Apps</Link></Menu.Item>
+        <Menu.Item key="launch"><Link to='/launch'><Icon type={'code-o'} style={{ marginRight: 8 }} />Launch</Link></Menu.Item>
       </Menu>
     </Sider>
     <Layout>

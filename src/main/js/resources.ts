@@ -69,8 +69,8 @@ type LaunchToken = {
   idToken: string
 };
 
-export function getLaunchToken(token: string, appId: number | string): Promise<LaunchToken> {
-  return axios.get(`/api/apps/${appId}/launch`, {
+export function getLaunchToken(token: string, launchAppRequest: any): Promise<LaunchToken> {
+  return axios.post(`/api/apps/launch`, launchAppRequest, {
     headers: { Authorization: token }
   }).then(resp => {
     console.log('got token back: ', resp.data);

@@ -17,44 +17,65 @@ object LaunchService {
 
   implicit val config: Configuration = Configuration.default
 
-  case class LaunchAppRequest(url: String)
   case class IdToken(token: String)
 
-  def constructLaunchToken(): LtiJsonLaunch = {
+  case class LaunchAppRequest(
+    url: String,
+    messageType: String,
+    deploymentId: String,
+    label: String,
+    given_name: String,
+    family_name: String,
+    full_name: String,
+    guid: String,
+    email: String,
+    roles: String,
+    picture: String,
+    middle_name: String,
+    context_id: String,
+    context_label: String,
+    context_title: String,
+    context_type: List[String],
+    resource_link_id: String,
+    resource_link_title: String,
+    resource_link_description: String
+  )
+
+  def constructLaunchToken(lar: LaunchAppRequest): LtiJsonLaunch = {
     // build it?
     LtiJsonLaunch(
-      "LtiResourceLinkRequest",
+      lar.messageType,
       "LTI-1p3",
-      "Harry",
-      "Potter",
-      "",
-      "",
-      "",
-      "Harry Potter",
-      List("http://purl.imsglobal.org/vocab/lis/v2/institution/person#Student"),
+      lar.given_name,
+      lar.family_name,
+      lar.middle_name,
+      lar.picture,
+      lar.email,
+      lar.full_name,
+      lar.roles.split(",").toList,// List("http://purl.imsglobal.org/vocab/lis/v2/institution/person#Student"),
       ResourceLink(
-        "abcd",
-        "My Resource",
-        ""
+        lar.resource_link_id,
+        lar.resource_link_title,
+        lar.resource_link_description
       ),
       Context(
-        "1234",
-        "my_course",
-        "My Course",
-        List("course_offering")
+        lar.context_id,
+        lar.context_label,
+        lar.context_title,
+        lar.context_type
       ),
       ToolPlatform(
-        "",
-        "",
-        "",
-        "",
-        "",
-        ""
+        "Specs",
+        "pfbgray(at)gmail.com",
+        "A testing platform for learning standards",
+        "https://specs.paulgray.net",
+        "specs",
+        "1"
       ),
       AGS(),
       LaunchPresentation(
         "_blank",
-        0,0,
+        500,500,
         "todo"
       ),
       Map(),
@@ -63,7 +84,7 @@ object LaunchService {
       aud = "",
       iat = (Instant.now.toEpochMilli / 1000).toString,
       exp = (Instant.now.plus(java.time.Duration.ofSeconds(60)).toEpochMilli / 1000).toString,
-      sub = "bueller?",
+      sub = "todo",
       nonce = UUID.randomUUID().toString
     )
   }

@@ -11,16 +11,16 @@ const updateMessageType = (formState) => (mt) => {
   });
 }
 
-const LaunchToolForm = ({ updateField, formState, messageTypes }) => (
+const LaunchToolForm = ({ updateField, formState, messageTypes, refreshToken}) => (
   <Card>
-    <h4>Launch</h4>
-    <Entry attr="url" formState={formState} />
+    {/* <h4>Launch</h4> */}
+    <Entry attr="url" formState={formState} updateField={updateField} />
     <div className="ant-row ant-form-item">
       <Col sm={{ span: 7, offset: 1 }} className="ant-form-item-label">
         <label htmlFor={name}>Message type</label>
       </Col>
       <Col sm={{ span: 16 }} className="ant-form-item-label">
-        <Select defaultValue={formState.data.messageType} onChange={updateMessageType(formState)}>
+        <Select defaultValue={formState.data.messageType} onChange={updateField(formState, 'messageType')}>
           {MessageTypes.map(mt => (
             <Select.Option value={mt} key={mt}>
               {mt}
@@ -29,7 +29,7 @@ const LaunchToolForm = ({ updateField, formState, messageTypes }) => (
         </Select>
       </Col>
     </div>
-    <Entry attr="deploymentId" formState={formState} />
+    <Entry attr="deploymentId" formState={formState} updateField={updateField} />
   </Card>
 );
 
