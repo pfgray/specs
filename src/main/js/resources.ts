@@ -38,9 +38,10 @@ export function getActivities(orgId: Id, courseId: Id, token: string): Promise<A
 
 export type App = {
   id: number,
-  name: String,
-  logo: String,
-  publicKey: String
+  name: string,
+  description: string,
+  logo: string,
+  publicKey: string
 };
 
 export type AppList = {

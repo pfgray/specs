@@ -72,6 +72,7 @@ create table if not exists tokens (
 create table if not exists apps (
   id          serial primary key,
   name        varchar not null,
+  description varchar,
   logo        varchar,
   public_key  varchar not null,
 

@@ -136,7 +136,7 @@ const AppLaunch = () =>
           </Row>
 
           <Row style={{opacity: tokenState.data.dirty? '0.5' : '1'}}>
-            <Col sm={{ span: 24 }} style={{ paddingLeft: '0.5rem' }}>
+            <Col sm={{ span: 24 }}>
               <form method="POST" action={formState.data.url}>
                 <input type="hidden" value={'hmm'} name="id_token" />
                 <input type="submit" value="Launch" className='ant-btn ant-btn-primary' disabled={tokenState.data.dirty}></input>

@@ -21,7 +21,7 @@ const Courses = () =>
         .map(activities => [activities.activities, route, route.match.params.orgId, route.match.params.courseId, token])
     )
   ).ap(([activities, route, orgId, courseId, token]) => (
-    <ItemListLayout title={'Activities'} add={{ href: `/organizations/${orgId}/courses/${courseId}/activities/new`, title: 'New activity' }} orgName={'Hmm'}>
+    <ItemListLayout title={'Activities'} add={{ href: `/organizations/${orgId}/courses/${courseId}/activities/add`, title: 'New activity' }} orgName={'Hmm'}>
       <div className='gutter-box'>
         <List
           itemLayout="vertical"

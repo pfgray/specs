@@ -8,11 +8,11 @@ import net.paulgray.specs.core.KeypairService._
 
 object AppQueries {
 
-  case class CreateAppRequest(name: String, logo: String)
+  case class CreateAppRequest(name: String, description: Option[String], logo: Option[String])
 
-  case class AppIn(name: String, logo: String, publicKey: String)
-  case class App(id: Long, name: String, logo: String, publicKey: String)
-  case class AppOut(name: String, logo: String, publicKey: String, privateKey: String)
+  case class AppIn(name: String, description: Option[String], logo: Option[String], publicKey: String)
+  case class App(id: Long, name: String, description: Option[String], logo: Option[String], publicKey: String)
+  case class AppOut(name: String, description: Option[String], logo: Option[String], publicKey: String, privateKey: String)
 
   def getAllApps: ConnectionIO[List[App]] =
     sql"select id, name, logo, public_key from apps".query[App].list
@@ -42,9 +42,9 @@ object AppQueries {
         |  Private Key:
         |    $privateKey
       """.stripMargin)
-    val appIn = AppIn(app.name, app.logo, pubKey)
+    val appIn = AppIn(app.name, app.description, app.logo, pubKey)
     createApp(appIn, clientId).map(bool => {
-      AppOut(app.name, app.logo, pubKey, privateKey)
+      AppOut(app.name, app.description, app.logo, pubKey, privateKey)
     })
   }
 

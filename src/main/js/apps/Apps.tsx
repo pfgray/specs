@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { withPromise, fromRenderProp } from 'chainable-components';
 import * as axios from 'axios';
-import { List, Icon, Row, Col } from 'antd';
+import { List, Icon, Row, Col, Card } from 'antd';
 import { Route, Link } from 'react-router-dom';
 import ItemListLayout from '../layout/ItemListLayout';
 import IconText from '../components/IconText';
@@ -25,10 +25,9 @@ const Apps = () =>
           itemLayout="vertical"
           dataSource={apps}
           renderItem={(app) => (
-            <div>
-              <pre>{JSON.stringify(app, null, 2)}</pre>
-              <Link to={`/apps/${app.id}/launch`} className="ant-btn ant-btn-primary">Launch this app</Link>
-            </div>
+            <Card>
+              <img src={app.image} />{app.name}
+            </Card>
           )} />
       </div>
     </ItemListLayout>
