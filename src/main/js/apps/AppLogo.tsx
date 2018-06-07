@@ -5,20 +5,30 @@ import './app-logo.less';
 
 type AppLogoProps = {
   app: App
+  style?: any
 };
 
 const AppLogo = (props: AppLogoProps) => (
   props.app.logo ? (
     <img className='app-logo' src={props.app.logo} />
   ) : (
-    <HashedLogo app={props.app}/>
+    <HashedLogo {...props}/>
   )
 );
 
 export default AppLogo;
 
+const logoStyle = (props: AppLogoProps) => {
+  console.log('Got props:', props);
+  if(!props.style) {
+    return {backgroundColor: getColorForString(props.app.name)};
+  } else {
+    return {backgroundColor: getColorForString(props.app.name), ...props.style};
+  }
+}
+
 const HashedLogo = (props: AppLogoProps) => (
-  <div className='app-logo hashed' style={{backgroundColor: getColorForString(props.app.name)}}>
+  <div className='app-logo hashed' style={logoStyle(props)}>
     {props.app.name.charAt(0)}
   </div>
 );

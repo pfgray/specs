@@ -75,6 +75,7 @@ create table if not exists apps (
   description varchar,
   logo        varchar,
   public_key  varchar not null,
+  placements  json not null default '{"placements": []}'::JSON,
 
   created_at  timestamptz not null default NOW(),
   client_id   integer not null references clients(id)

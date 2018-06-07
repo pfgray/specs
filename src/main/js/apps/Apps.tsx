@@ -9,6 +9,7 @@ import withAuth from '../util/AuthContext';
 import withLoading from '../util/Loadable';
 import { getApps, App } from '../resources';
 import { withLoadablePromise } from '../util/Loadable';
+import AppLogo from './AppLogo';
 
 const withRoute = fromRenderProp(Route);
 
@@ -19,14 +20,15 @@ const Apps = () =>
         .map(apps => [apps.apps, route, token])
     )
   ).ap(([apps, route, orgId, courseId, token]) => (
-    <ItemListLayout title={'Activities'} add={{ href: `/apps/register`, title: 'Register your App' }} orgName={'Your Apps'}>
+    <ItemListLayout title={'Activities'} add={{ href: `/apps/register`, title: 'Add App' }} orgName={'Your Apps'}>
       <div className='gutter-box'>
         <List
           itemLayout="vertical"
           dataSource={apps}
           renderItem={(app) => (
-            <Card>
-              <img src={app.image} />{app.name}
+            <Card style={{marginBottom: '1rem'}}>
+              <AppLogo app={app}/><h3>{app.name}</h3>
+              <Link to={`/apps/${app.id}/manage`}>manage</Link>
             </Card>
           )} />
       </div>

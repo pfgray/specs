@@ -8,6 +8,7 @@ import OrganizationForm from '../organizations/OrganizationForm';
 import Apps from '../apps/Apps';
 import AppLaunch from '../apps/AppLaunch';
 import Register from '../apps/RegistrationForm';
+import ManageApp from '../apps/ManageApp';
 import { fromRenderProp } from 'chainable-components';
 
 const withRoute = fromRenderProp(Route);
@@ -38,6 +39,7 @@ withRoute({}).ap(route => (
         <Route exact path='/' component={Organizations} />
         <Route exact path='/launch' component={AppLaunch} />
         <Route exact path='/apps' component={Apps} />
+        <Route exact path='/apps/:appId/manage' component={ManageApp} />
         <Route exact path='/apps/register' component={Register} />
         <Route exact path='/organizations/new' component={OrganizationForm} />
         <Route exact path='/organizations/edit/:id' component={OrganizationForm} />
