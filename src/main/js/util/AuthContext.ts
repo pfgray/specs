@@ -1,10 +1,8 @@
-import * as React from 'react';
 import { fromAp } from 'chainable-components';
 import * as lscache from 'lscache';
 
 const withAuth = fromAp<string>(render => {
-  const token = lscache.get('auth_token');
-  console.log('got token: ', token);
+  const token: string = lscache.get('auth_token');
   return render(token);
 });
 

@@ -42,16 +42,6 @@ object AppQueries {
 
   case class Placements(placements: List[Placement])
   case class Placement(place: String, url: String)
-  implicit val placementsEncodeJson =
-    Encoder.forProduct1("placements") { (p: Placements) =>
-      (p.placements)
-    }
-
-  implicit val placementsDecodeJson =
-    Decoder.forProduct1("placements") {
-      (placements: List[Placement]) =>
-        Placements(placements)
-    }
 
   implicit val PlacementsMeta = codecMeta[Placements]
 

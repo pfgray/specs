@@ -17,10 +17,12 @@ const ManageApp = () =>
   withAuth
     .chain(token =>
       withRoute({}).chain(route =>
-        withLoadablePromise(() => getApp(token, route.match.params.appId))
+        withLoadablePromise(() => getApp(token, route.match.params.appId)).chain(initialApp => (
+          withState({initial:initialApp}).map(app => [initialApp, app])
+        ))
       )
     )
-    .ap((app) => {
+    .ap(([initialApp, app]) => {
       return (
         <Row style={{ marginTop: '2rem' }}>
           <Col sm={{ span: 16, offset: 4 }} xs={{ span: 22, offset: 1 }}>
@@ -32,6 +34,7 @@ const ManageApp = () =>
               </div>
             </div>
             <h4>Placements</h4>
+              
           </Col>
         </Row>
       );
