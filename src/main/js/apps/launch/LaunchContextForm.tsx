@@ -10,12 +10,13 @@ const changeContext = (formState: any, updateField: any) => label => {
   const newContext = Contexts.find(c => c.label === label);
   if (newContext) {
     formState.update({
-      ...formState.data,
+      ...formState.value,
       ...newContext
     });
     updateField(formState, 'context_id')(newContext.context_id);
   }
 }
+
 const LaunchContextForm = ({ updateField, formState, contextTypes, refreshToken }) => (
   <Card>
     <div className="form-card-header">
@@ -41,7 +42,7 @@ const LaunchContextForm = ({ updateField, formState, contextTypes, refreshToken 
         <Select
           mode="multiple"
           style={{ width: '100%' }}
-          defaultValue={formState.data.context_type}
+          defaultValue={formState.value.context_type}
           onChange={updateField(formState, 'context_type')}
         >
           {contextTypes.map(ct => <Select.Option value={ct} key={ct}>{ct}</Select.Option>)}

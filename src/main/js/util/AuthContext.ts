@@ -1,9 +1,6 @@
-import { fromAp } from 'chainable-components';
+import { ChainableComponent } from 'chainable-components';
 import * as lscache from 'lscache';
 
-const withAuth = fromAp<string>(render => {
-  const token: string = lscache.get('auth_token');
-  return render(token);
-});
+const withAuth = ChainableComponent.of(lscache.get('auth_token') as string);
 
 export default withAuth;

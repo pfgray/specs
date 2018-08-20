@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { withPromise, fromRenderProp } from 'chainable-components';
+import { withPromise, fromRenderProp, ChainableComponent } from 'chainable-components';
 import * as axios from 'axios';
 import { List, Icon, Row, Col, Table } from 'antd';
 import { Route, Link } from 'react-router-dom';
@@ -7,7 +7,9 @@ import ItemListLayout from '../layout/ItemListLayout';
 import IconText from '../components/IconText';
 
 import withAuth from '../util/AuthContext';
-import withLoading from '../util/Loadable';
+import withLoading, { withLoadablePromise } from '../util/Loadable';
+import { getEnrollments, getOrganization, Enrollment, EnrollmentInfo, Organization } from '../resources';
+import IdToken from '../apps/IdToken';
 
 const withRoute = fromRenderProp(Route);
 
@@ -24,23 +26,25 @@ const columns = [{
 }]
 
 const Courses = () =>
-  withAuth.chain(token =>
-    withRoute({}).chain(route =>
-      withPromise({
-        get: () => Promise.all([
-          axios.get(`/api/organizations/${route.match.params.orgId}/courses/${route.match.params.courseId}/enrollments`, {
-            headers: { Authorization: token }
-          }),
-          axios.get(`/api/organizations/${route.match.params.orgId}`, {
-            headers: { Authorization: token }
-          })
-        ])
-      }).chain(coursesReq =>
-        withLoading(coursesReq).map(([enrollments, org]) => [enrollments.data, org, token, route.match.params.orgId, route.match.params.courseId])
-      )
-    )
-  ).ap(([enrollments, org, token, orgId, courseId]) => (
-    <ItemListLayout title={'Enrollments'} add={{ href: `/organizations/${orgId}/courses/${courseId}/enrollments/new`, title: 'New enrollment' }} orgName={org.data.name}>
+  ChainableComponent.Do(
+    withAuth,
+    () => withRoute,
+    (route, token) => 
+      withLoadablePromise(() => 
+      Promise.all([
+        getEnrollments(route.match.params.orgId, route.match.params.courseId, token),
+        getOrganization(route.match.params.orgId, token)
+      ]) as Promise<[EnrollmentInfo[], Organization]>
+    ),
+    ([enrollments, org], route, token) => ({
+      enrollments,
+      org,
+      token, 
+      orgId: route.match.params.orgId,
+      courseId: route.match.params.courseId
+    })
+  ).render(({enrollments, org, orgId, courseId}) => (
+    <ItemListLayout title={'Enrollments'} add={{ href: `/organizations/${orgId}/courses/${courseId}/enrollments/new`, title: 'New enrollment' }} orgName={org.name}>
       <Table dataSource={enrollments} columns={columns} />
     </ItemListLayout>
   ));

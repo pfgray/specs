@@ -1,12 +1,15 @@
 import * as React from 'react';
-import { withPromise, fromRenderProp, withState } from 'chainable-components';
+import { withPromise, fromRenderProp, withState, ChainableComponent } from 'chainable-components';
 import axios from 'axios';
 import { Select, Row, Col, Button } from 'antd';
 const Option = Select.Option;
 import { Route, RouteComponentProps } from 'react-router-dom';
 import withAuth from '../util/AuthContext';
-import withLoading from '../util/Loadable';
+import withLoading, { withLoadablePromise } from '../util/Loadable';
 import entityForm, { GenericForm } from '../entityForm/EntityForm';
+import { getUsersNotInCourse, Id } from '../resources';
+import { isInteger } from 'formik';
+import { User } from '../apps/entities';
 
 const withRoute = fromRenderProp(Route);
 
@@ -14,9 +17,9 @@ const handleChange = (a, b, c) => {
   console.log('handling change: ', a, b, c);
 }
 
-const submit = (users, role, setSubmitting, orgId, courseId, token, route: RouteComponentProps<{}>) => (e, t) => {
+const submit = (users: User[], role: string, setSubmitting: any, orgId: Id, courseId: Id, token: string, route: RouteComponentProps<{}>) => (e: any) => {
   e.preventDefault();
-  console.log('submitting: ', e.target, t);
+  console.log('submitting: ', e.target);
   setSubmitting(true);
   axios.put(`/api/organizations/${orgId}/courses/${courseId}/enrollments`, {
     userIds: users,
@@ -29,33 +32,38 @@ const submit = (users, role, setSubmitting, orgId, courseId, token, route: Route
   });
 }
 
-const withInit =
-  withAuth
+const withInit = withAuth
     .chain(token =>
-      withRoute({}).chain(route =>
-        withPromise({
-          get: () => axios.get(`/api/organizations/${route.match.params.orgId}/courses/${route.match.params.courseId}/usersNotInCourse`, {
-            headers: { Authorization: token }
+      withRoute.chain(route =>
+        withLoadablePromise(() => getUsersNotInCourse(route.match.params.orgId, route.match.params.courseId, token)).map(
+          users => ({
+            users,
+            token,
+            route,
+            orgId: route.match.params.orgId,
+            courseId: route.match.params.courseId,
           })
-        }).chain(usersReq =>
-          withLoading(usersReq).map(users => [users.data, token, route.match.params.orgId, route.match.params.courseId, route])
         )
       )
     );
 
+
 const withEnrollmentState =
-  withState({initial:false}).chain(submitting =>
-    withState({initial:[]}).chain(users =>
-      withState({initial:'student'}).map(role => [submitting, users, role])
+  withState(false).chain(submitting =>
+    withState([]).chain(users =>
+      withState('student').map(role => ({submitting, users, role}))
     )
   )
 
+// <form onSubmit={submit(enrollmentState.value.users, enrollmentState.value.role, enrollmentState.update, orgId, courseId, token, route)} style={{ marginTop: '3rem' }} disabled={enrollmentState.value.submitting}>
+
 const EnrollmentForm = () =>
-  withInit.chain(([users, token, orgId, courseId, route]) =>
-    withEnrollmentState.map(([submitting, chosenUsers, chosenRole]) =>
-      [users, token, orgId, courseId, submitting, chosenUsers, chosenRole, route])
-  ).ap(([users, token, orgId, courseId, submitting, chosenUsers, chosenRole, route]) => (
-    <form onSubmit={submit(chosenUsers.data, chosenRole.data, submitting.update, orgId, courseId, token, route)} style={{ marginTop: '3rem' }} disabled={submitting.data}>
+  ChainableComponent.Do(
+    withInit,
+    _ => withEnrollmentState,
+    (enrollments, init) => ({enrollments, ...init})
+  ).render(({users, token, orgId, courseId, enrollments, route}) => (
+    <form onSubmit={submit(enrollments.users.value, enrollments.role.value, enrollments.submitting.update, orgId, courseId, token, route)} style={{ marginTop: '3rem' }} disabled={enrollments.submitting.value}>
       <Row gutter={16}>
         <Col className='gutter-row' span={8} offset={4} style={{ marginTop: '4rem' }}>
           <h2>Add Users</h2>
@@ -69,16 +77,15 @@ const EnrollmentForm = () =>
             style={{ width: '100%' }}
             placeholder="Users"
             defaultValue={[]}
-            onChange={chosenUsers.update}
-            name="student"
+            onChange={enrollments.users.update as any}
             filterOption={(input, option) => { console.log(option); return option.props.searchTerm.toLowerCase().indexOf(input.toLowerCase()) >= 0 }}
           >
-            {users.map(u => <Option key={u.id} searchTerm={`${u.fullName} - ${u.username}`} value={u.id}>{u.fullName} - {u.username}</Option>)}
+            {users.map((u: User) => <Option key={u.id} searchTerm={`${u.fullName} - ${u.username}`} value={u.id}>{u.fullName} - {u.username}</Option>)}
           </Select>
         </Col>
 
         <Col className='gutter-row' span={4}>
-          <Select defaultValue="student" style={{ width: '100%' }} onChange={chosenRole.update} name="role">
+          <Select defaultValue="student" style={{ width: '100%' }} onChange={enrollments.role.update as any}>
             <Option value="student">Student</Option>
             <Option value="instructor">Instructor</Option>
           </Select>

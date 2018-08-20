@@ -1,11 +1,10 @@
-import * as React from 'react';
-import { withPromise, fromRenderProp } from 'chainable-components';
+import { List } from 'antd';
 import * as axios from 'axios';
-import { List, Icon, Row, Col } from 'antd';
-import { Route, Link } from 'react-router-dom';
-import ItemListLayout from '../layout/ItemListLayout';
+import { fromRenderProp, withPromise } from 'chainable-components';
+import * as React from 'react';
+import { Link, Route } from 'react-router-dom';
 import IconText from '../components/IconText';
-
+import ItemListLayout from '../layout/ItemListLayout';
 import withAuth from '../util/AuthContext';
 import withLoading from '../util/Loadable';
 
@@ -13,9 +12,9 @@ const withRoute = fromRenderProp(Route);
 
 const Courses = () =>
   withAuth.chain(token =>
-    withRoute({}).chain(route =>
-      withPromise({
-        get: () => Promise.all([
+    withRoute.chain(route =>
+      withPromise(
+        () => Promise.all([
           axios.get(`/api/organizations/${route.match.params.orgId}/courses`, {
             headers: { Authorization: token }
           }),
@@ -23,11 +22,11 @@ const Courses = () =>
             headers: { Authorization: token }
           })
         ])
-      }).chain(coursesReq =>
+      ).chain(coursesReq =>
         withLoading(coursesReq).map(([courses, org]) => [courses, org, token, route.match.params.orgId])
       )
     )
-  ).ap(([courses, org, token, orgId]) => (
+  ).render(([courses, org, token, orgId]) => (
     <ItemListLayout title={'Courses'} add={{ href: `/organizations/${orgId}/courses/new`, title: 'New course' }} orgName={org.data.name}>
       <div className='gutter-box'>
         <List

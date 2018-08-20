@@ -24,7 +24,7 @@ const matchPath = (path: string) => {
 }
 
 const SpecsLayout = () => 
-withRoute({}).ap(route => (
+withRoute.render(route => (
   <Layout style={{ minHeight: '100vh' }}>
     <Sider collapsible>
       <h1 className='logo' style={{ color: '#fff', padding: '1rem' }}>Specs.</h1>
@@ -36,13 +36,13 @@ withRoute({}).ap(route => (
     </Sider>
     <Layout>
       <Content>
-        <Route exact path='/' component={Organizations} />
-        <Route exact path='/launch' component={AppLaunch} />
-        <Route exact path='/apps' component={Apps} />
-        <Route exact path='/apps/:appId/manage' component={ManageApp} />
-        <Route exact path='/apps/register' component={Register} />
-        <Route exact path='/organizations/new' component={OrganizationForm} />
-        <Route exact path='/organizations/edit/:id' component={OrganizationForm} />
+        <Route exact path='/' component={Organizations as any} />
+        <Route exact path='/launch' component={AppLaunch as any} />
+        <Route exact path='/apps' component={Apps as any} />
+        <Route exact path='/apps/:appId/manage' component={ManageApp as any} />
+        <Route exact path='/apps/register' component={ManageApp as any} />
+        <Route exact path='/organizations/new' component={OrganizationForm as any} />
+        <Route exact path='/organizations/edit/:id' component={OrganizationForm as any} />
       </Content>
     </Layout>
   </Layout>

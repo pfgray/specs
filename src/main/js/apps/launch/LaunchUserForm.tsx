@@ -8,7 +8,7 @@ const changeUser = (formState: any, updateField: any, refreshToken: any) => guid
   const newUser = Users.find(u => u.guid === guid);
   if (newUser) {
     const newFormState = {
-      ...formState.data,
+      ...formState.value,
       ...newUser
     };
     formState.update(newFormState);
@@ -39,8 +39,8 @@ const LaunchUserForm = ({ updateField, formState, refreshToken }) => (
           </label>
         </Col>
         <Col sm={{ span: 16 }}>
-          <img className='user-picture' src={formState.data.picture} />
-          <input id={'picture'} name={'picture'} className="ant-input" value={formState.data.picture} onChange={updateField(formState, 'picture')} />
+          <img className='user-picture' src={formState.value.picture} />
+          <input id={'picture'} name={'picture'} className="ant-input" value={formState.value.picture} onChange={updateField(formState, 'picture')} />
         </Col>
       </div>
     </div>

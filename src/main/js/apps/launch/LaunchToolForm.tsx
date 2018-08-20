@@ -1,12 +1,11 @@
+import { Card, Col, Select } from 'antd';
 import * as React from 'react';
-
-import { List, Icon, Row, Col, Button, Card, Select } from 'antd';
-import { Users } from '../entities';
 import { Entry, MessageTypes } from '../AppLaunch';
+
 
 const updateMessageType = (formState) => (mt) => {
   formState.update({
-    ...formState.data,
+    ...formState.value,
     messageType: mt
   });
 }
@@ -20,7 +19,7 @@ const LaunchToolForm = ({ updateField, formState, messageTypes, refreshToken}) =
         <label htmlFor={name}>Message type</label>
       </Col>
       <Col sm={{ span: 16 }} className="ant-form-item-label">
-        <Select defaultValue={formState.data.messageType} onChange={updateField(formState, 'messageType')}>
+        <Select defaultValue={formState.value.messageType} onChange={updateField(formState, 'messageType')}>
           {MessageTypes.map(mt => (
             <Select.Option value={mt} key={mt}>
               {mt}

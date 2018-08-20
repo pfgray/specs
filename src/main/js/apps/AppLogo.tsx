@@ -19,7 +19,6 @@ const AppLogo = (props: AppLogoProps) => (
 export default AppLogo;
 
 const logoStyle = (props: AppLogoProps) => {
-  console.log('Got props:', props);
   if(!props.style) {
     return {backgroundColor: getColorForString(props.app.name)};
   } else {
@@ -46,7 +45,7 @@ const Colors = [
   '#a64d79'
 ];
 
-var hash = function(str: string): number {
+const hashStr = function(str: string): number {
   var hash = 0, i, chr, len;
   if (str.length == 0) return hash; 
   for (i = 0, len = str.length; i < len; i++) {
@@ -58,6 +57,9 @@ var hash = function(str: string): number {
 };
 
 const getColorForString = function(input: string): string {
-  var number = Math.abs(hash(input));
+  if(!input || input === '') {
+    return '#FFF';
+  }
+  const number = Math.abs(hashStr(input));
   return Colors[Math.floor(number % Colors.length)];
 };

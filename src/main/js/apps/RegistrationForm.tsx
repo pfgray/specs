@@ -11,8 +11,8 @@ const withRoute = fromRenderProp(Route);
 const RegistrationForm = () =>
   withAuth
     .chain(token =>
-      withRoute({}).chain(route =>
-        withState({ initial: { submitted: false } }).chain(state =>
+      withRoute.chain(route =>
+        withState({ submitted: false }).chain(state =>
           entityForm({
             auth: token,
             edit: false,
@@ -41,8 +41,8 @@ const RegistrationForm = () =>
         )
       )
     )
-    .ap(([state, entityFormProps]) => {
-      if (state.data.submitted) {
+    .render(([state, entityFormProps]) => {
+      if (state.value.submitted) {
         return (
           <Row>
             <Col sm={{ span: 8, offset: 8 }} xs={{ span: 22, offset: 1 }}>

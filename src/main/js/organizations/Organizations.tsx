@@ -1,38 +1,19 @@
 import * as React from 'react';
-import { withPromise } from 'chainable-components';
-import axios from 'axios';
-import { List, Icon, Row, Col, Button } from 'antd';
+import { List, Row, Col } from 'antd';
 import { Link } from 'react-router-dom';
-
 import withAuth from '../util/AuthContext';
-import withLoading from '../util/Loadable';
+import { withLoadablePromise } from '../util/Loadable';
 import IconText from '../components/IconText';
-
-function delay(t, v) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve.bind(null, v), t)
-  });
-}
-
-Promise.prototype.delay = function (t) {
-  return this.then(function (v) {
-    return delay(t, v);
-  });
-}
+import { getOrganizations, OrganizationWithAggregate } from '../resources';
+import { ChainableComponent } from 'chainable-components';
 
 const Organizations = () =>
-  withAuth.chain(token => {
-    return withPromise({
-      get: () => axios.get('/api/organizations', {
-        headers: { Authorization: token }
-      })
-    })
-    .chain(orgReq =>
-      withLoading(orgReq).map(orgs => [orgs.data, token])
-    )
-  }).ap(([orgs, token]) => (
+  ChainableComponent.Do(
+    withAuth,
+    token => withLoadablePromise(() => getOrganizations(token)),
+    orgs => orgs.organizations
+  ).render((orgs) => (
     <Row gutter={16}>
-      {/* <pre>{JSON.stringify(props, null, 2)}</pre> */}
       <Col className='gutter-row' span={14} offset={5}>
         <div className='gutter-box' style={{ marginTop: '2rem' }}>
           <Link className='ant-btn ant-btn-primary' to='/organizations/new'>
@@ -44,25 +25,25 @@ const Organizations = () =>
           <List
             itemLayout="vertical"
             size="large"
-            dataSource={orgs.organizations}
-            renderItem={item => (
+            dataSource={orgs}
+            renderItem={(org: OrganizationWithAggregate) => (
               <List.Item
-                key={item.org.name}
+                key={org.org.name}
                 actions={[
-                  <Link to={`/organizations/${item.org.id}/courses`}><IconText type="book" text={item.aggregates.coursesCount} /></Link>,
-                  <Link to={`/organizations/${item.org.id}/users`}><IconText type="user" text={item.aggregates.usersCount}/></Link>
+                  <Link to={`/organizations/${org.org.id}/courses`}><IconText type="book" text={org.aggregates.coursesCount.toString()} /></Link>,
+                  <Link to={`/organizations/${org.org.id}/users`}><IconText type="user" text={org.aggregates.usersCount.toString()} /></Link>
                 ]}
                 extra={<img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
               >
                 <List.Item.Meta
-                  title={<Link to={`/organizations/${item.org.id}/courses`}><IconText text={item.org.name} type="global"/></Link>}
-                  description={<a href={item.org.url}>{item.org.url}</a>}
+                  title={<Link to={`/organizations/${org.org.id}/courses`}><IconText text={org.org.name} type="global" /></Link>}
+                  description={<a href={org.org.url}>{org.org.url}</a>}
                 />
-                <div>{item.org.description}</div>
-                <div>{item.org.guid}</div>
-                <div>{item.org.contactEmail}</div>
+                <div>{org.org.description}</div>
+                <div>{org.org.guid}</div>
+                <div>{org.org.contactEmail}</div>
                 <div>
-                  <Link to={`/organizations/edit/${item.org.id}`}>edit</Link>
+                  <Link to={`/organizations/edit/${org.org.id}`}>edit</Link>
                 </div>
               </List.Item>
             )}

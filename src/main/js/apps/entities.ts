@@ -1,6 +1,14 @@
 
 
-
+export type User = {
+  full_name: string,
+  given_name: string,
+  family_name: string,
+  guid: string,
+  email: string,
+  roles: string,
+  picture: string
+}
 export const
   Users = [{
     full_name: 'Harry Potter',

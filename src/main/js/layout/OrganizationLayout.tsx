@@ -14,6 +14,7 @@ import EnrollmentForm from '../enrollments/EnrollmentForm';
 import withAuth from '../util/AuthContext';
 import Activities from '../activities/Activities';
 import ActivityForm from '../activities/ActivityForm';
+import Activity from '../activities/Activity';
 import ActivityFromApp from '../activities/ActivityFromApp';
 
 import { getOrganization } from '../resources';
@@ -31,10 +32,10 @@ const withRoute = fromRenderProp(Route);
 
 const OrganizationLayout = () =>
   withAuth.chain(token =>
-    withRoute({}).chain(route =>
+    withRoute.chain(route =>
       withLoadablePromise(() => getOrganization(route.match.params.orgId, token)).map(org => [org, route])
     )
-  ).ap(([org, route]) => (
+  ).render(([org, route]) => (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible style={{ background: '#fff' }}>
         <h1 className='logo' style={{ padding: '1rem' }}>{org.name}</h1>
@@ -63,6 +64,7 @@ const OrganizationLayout = () =>
           <Route exact path='/organizations/:orgId/courses/:courseId/activities' component={Activities} />
           <Route exact path='/organizations/:orgId/courses/:courseId/activities/add' component={ActivityFromApp} />
           <Route exact path='/organizations/:orgId/courses/:courseId/activities/manual/new' component={ActivityForm} />
+          <Route exact path='/organizations/:orgId/courses/:courseId/activities/:activityId' component={Activity} />
           <Route exact path='/organizations/:orgId/courses/:courseId/activities/:activityId/edit' component={ActivityForm} />
           
         </Content>

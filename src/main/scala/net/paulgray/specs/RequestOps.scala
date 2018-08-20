@@ -1,6 +1,6 @@
 package net.paulgray.specs
 
-import org.http4s.{Request, Uri}
+import org.http4s.{Header, Headers, Request, Uri}
 import org.http4s.Uri.{Authority, RegName, Scheme}
 
 object RequestOps {
@@ -19,7 +19,7 @@ object RequestOps {
           scheme = Some(Scheme.http),
           authority = Some(Authority(host = RegName("localhost"), port = Some(9000))),
           path = path
-        ))
+        )).withHeaders(Headers(Header("Host", "http://localhost:8080")))
     }
   }
 

@@ -81,7 +81,7 @@ object LaunchService {
       Map(),
       "1",
       iss = "",
-      aud = "",
+      aud = Seq(""),
       iat = (Instant.now.toEpochMilli / 1000).toString,
       exp = (Instant.now.plus(java.time.Duration.ofSeconds(60)).toEpochMilli / 1000).toString,
       sub = "todo",
@@ -107,7 +107,7 @@ object LaunchService {
     @JsonKey("http://imsglobal.org/lti/custom") custom: Map[String, String],
     @JsonKey("http://imsglobal.org/lti/deployment_id") deploymentId: String,
     iss: String,
-    aud: String,
+    aud: Seq[String],
     iat: String, // date?
     exp: String, // date?
     sub: String,
@@ -148,7 +148,7 @@ object LaunchService {
   implicit class LtiJsonLaunchOps(jsonLaunch: LtiJsonLaunch) {
     def toJWT(issuer: String, audience: String): JwtBuilder = {
       Jwts.builder()
-        .setPayload(jsonLaunch.copy(iss = issuer, aud = audience).asJson.toString)
+        .setPayload(jsonLaunch.copy(iss = issuer, aud = Seq(audience)).asJson.toString)
     }
   }
 
