@@ -62,7 +62,7 @@ const OrganizationLayout = () =>
           <Route exact path='/organizations/:orgId/courses/:courseId/enrollments/new' component={EnrollmentForm} />
 
           <Route exact path='/organizations/:orgId/courses/:courseId/activities' component={Activities} />
-          <Route exact path='/organizations/:orgId/courses/:courseId/activities/add' component={ActivityFromApp} />
+          <Route exact path='/organizations/:orgId/courses/:courseId/activities/library/new' component={ActivityFromApp} />
           <Route exact path='/organizations/:orgId/courses/:courseId/activities/manual/new' component={ActivityForm} />
           <Route exact path='/organizations/:orgId/courses/:courseId/activities/:activityId' component={Activity} />
           <Route exact path='/organizations/:orgId/courses/:courseId/activities/:activityId/edit' component={ActivityForm} />

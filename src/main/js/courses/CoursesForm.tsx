@@ -1,17 +1,14 @@
-import * as React from 'react';
-import { withPromise, fromRenderProp } from 'chainable-components';
-import axios from 'axios';
-import { Row, Col, Button, Input } from 'antd';
+import { fromRenderProp } from 'chainable-components';
 import { Route } from 'react-router-dom';
-import withAuth from '../util/AuthContext';
 import entityForm, { GenericForm } from '../entityForm/EntityForm';
+import withAuth from '../util/AuthContext';
 
 const withRoute = fromRenderProp(Route);
 
 const CoursesForm = () =>
   withAuth
     .chain(token =>
-      withRoute({}).chain(route =>
+      withRoute.chain(route =>
         entityForm({
           auth: token,
           edit: route.location.pathname.indexOf('edit') !== -1,
@@ -37,6 +34,6 @@ const CoursesForm = () =>
         })
       )
     )
-    .ap(GenericForm);
+    .render(GenericForm);
 
 export default CoursesForm;

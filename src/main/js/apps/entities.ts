@@ -52,6 +52,18 @@ export const
     picture: 'http://lti.paulgray.net/assets/scripts/sampleData/images/albus.jpg'
   }]
 
+
+export type Context = {
+  label: string,
+  context_id: string,
+  context_label: string,
+  context_title: string,
+  context_type: string[],
+  resource_link_id: string,
+  resource_link_title: string,
+  resource_link_description: string
+}
+
 export const Contexts = [{
   label: 'Potions 101',
   context_id: '534145987',

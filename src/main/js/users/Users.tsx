@@ -8,6 +8,8 @@ import ItemListLayout from '../layout/ItemListLayout';
 
 import withAuth from '../util/AuthContext';
 import withLoading from '../util/Loadable';
+import { getOrganization, getUsers, Organization, User } from '../resources';
+import BreadcrumbLayout from '../layout/BreadcrumbLayout';
 
 const withRoute = fromRenderProp(Route);
 
@@ -16,30 +18,28 @@ const Courses = () =>
     withRoute.chain(route =>
       withPromise(
         () => Promise.all([
-          axios.get(`/api/organizations/${route.match.params.orgId}/users`, {
-            headers: { Authorization: token }
-          }),
-          axios.get(`/api/organizations/${route.match.params.orgId}`, {
-            headers: { Authorization: token }
-          })
-        ])
+          getUsers(route.match.params.orgId, token),
+          getOrganization(route.match.params.orgId, token)
+        ]) as Promise<[User[], Organization]>
       ).chain(resp =>
-        withLoading(resp).map(([users, org]) => [users, org, token, route.match.params.orgId])
+        withLoading(resp).map(([users, org]) => ({users, org, token, orgId: route.match.params.orgId}))
       )
     )
-  ).render(([users, org, token, orgId]) => (
-    <ItemListLayout title={'Users'} add={{ href: `/organizations/${orgId}/users/new`, title: 'New user' }} orgName={org.data.name}>
-      <div className='gutter-box' style={{ marginTop: '1rem' }}>
-        <List
-          itemLayout="vertical"
-          dataSource={users.data.users}
-          renderItem={user => (
-            <List.Item actions={[<Link to={`/organizations/${orgId}/users/${user.id}/edit`}>edit</Link>]}>
-              <IconText type='user' text={user.username} />
-            </List.Item>
-          )} />
-      </div>
-    </ItemListLayout>
+  ).render(({users, org, orgId}) => (
+    <BreadcrumbLayout breadcrumbs={[org.name, "Users"]}>
+      <ItemListLayout add={{ href: `/organizations/${orgId}/users/new`, title: 'New user' }} orgName={org.name}>
+        <div className='gutter-box' style={{ marginTop: '1rem' }}>
+          <List
+            itemLayout="vertical"
+            dataSource={users}
+            renderItem={user => (
+              <List.Item style={{margin: 0}}>
+                <IconText type='user' text={user.username} /> <Link to={`/organizations/${orgId}/users/${user.id}/edit`}>edit</Link>
+              </List.Item>
+            )} />
+        </div>
+      </ItemListLayout>
+    </BreadcrumbLayout>
   ));
 
 export default Courses;

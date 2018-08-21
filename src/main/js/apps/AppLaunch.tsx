@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import debounce from 'lodash/debounce';
 import * as React from 'react';
 import { Route } from 'react-router-dom';
-import { getLaunchToken } from '../resources';
+import { getLaunchToken, LaunchForm } from '../resources';
 import withAuth from '../util/AuthContext';
 import { withLoadablePromise } from '../util/Loadable';
 import { Contexts, Users } from './entities';
@@ -83,27 +83,6 @@ export { Entry, MessageTypes };
 const DefaultUser = Users[0];
 const DefaultContext = Contexts[0];
 
-type LaunchForm = {
-  messageType: string,
-  url: string,
-  deploymentId: string,
-  full_name: string,
-  given_name: string,
-  family_name: string,
-  guid: string,
-  email: string,
-  roles: string,
-  picture: string
-  middle_name: "",
-  label: string,
-  context_id: string,
-  context_label: string,
-  context_title: string,
-  context_type:  string[],
-  resource_link_title: string,
-  resource_link_description: string, 
-  resource_link_id: string,
-}
 const AppLaunch = () =>
   ChainableComponent.Do(
     withAuth,
@@ -154,10 +133,7 @@ const AppLaunch = () =>
                 <input type="submit" value="Launch" className='ant-btn ant-btn-primary' disabled={tokenState.value.dirty}></input>
               </form>
               <h4>Id Token</h4>
-              <Card className='generated-id-token'>
-                <a href={`https://jwt.io/#id_token=${tokenState.value.idToken}`} target="_blank"><img src="http://jwt.io/img/badge.svg" /></a>
-                <IdToken token={tokenState.value.idToken}/>
-              </Card>
+              <IdToken token={tokenState.value.idToken}/>
             </Col>
           </Row>
           {/* <Entry name="custom" type="textarea" label="custom" type="textarea" /> */}

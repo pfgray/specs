@@ -1,25 +1,18 @@
 package net.paulgray.specs.client
 
-import cats.effect.IO
+import cats.syntax.either._
 import doobie.free.connection.ConnectionIO
 import doobie.implicits._
 import doobie.util.meta.Meta
+import io.circe.generic.auto._
+import io.circe.parser._
+import io.circe.syntax._
 import io.circe.{Decoder, Encoder, Json}
 import net.paulgray.specs.core.KeypairService
 import net.paulgray.specs.core.KeypairService._
 import org.postgresql.util.PGobject
 
 import scala.reflect.runtime.universe._
-import io.circe.syntax._
-import io.circe._
-import io.circe.generic.semiauto._
-import io.circe.literal._
-import io.circe.generic.auto._
-import io.circe.parser._
-import cats.syntax.either._
-import doobie.util.composite.Composite
-import io.circe.generic.JsonCodec
-import org.http4s.circe.jsonOf
 
 object AppQueries {
 
@@ -41,15 +34,28 @@ object AppQueries {
     )
 
   case class Placements(placements: List[Placement])
-  case class Placement(place: String, url: String)
+  case class Placement(name: String, url: String, launchType: String, customParameters: Map[String, String])
 
   implicit val PlacementsMeta = codecMeta[Placements]
 
-  case class CreateAppRequest(name: String, description: Option[String], logo: Option[String])
+  case class CreateAppRequest(name: String, description: Option[String], logo: Option[String], placements: Placements)
 
-  case class AppIn(name: String, description: Option[String], logo: Option[String], publicKey: String)
+  case class AppIn(name: String, description: Option[String], logo: Option[String], placements: Placements, publicKey: String)
   case class App(id: Long, name: String, description: Option[String], logo: Option[String], placements: Placements, publicKey: String)
   case class AppOut(name: String, description: Option[String], logo: Option[String], publicKey: String, privateKey: String)
+
+  def updateApp(app: CreateAppRequest, appId: Long): ConnectionIO[Int] =
+    sql"""
+         update apps
+           set name = ${app.name},
+             description = ${app.description},
+             logo = ${app.logo},
+             placements = ${app.placements}
+           where id = $appId
+      """.update.run
+
+  def updateUser(userId: Long, name: String): ConnectionIO[Int] =
+    sql"update users set username = $name where id = $userId".update.run
 
   def getAllApps: ConnectionIO[List[App]] =
     sql"select id, name, description, logo, placements, public_key from apps".query[App].list
@@ -62,16 +68,23 @@ object AppQueries {
 
   def createApp(app: AppIn, clientId: Long): ConnectionIO[Boolean] =
     sql"""insert into apps
-         (name, logo, public_key, client_id)
+         (name, logo, public_key, placements, client_id)
          values
-         (${app.name}, ${app.logo}, ${app.publicKey}, $clientId)""".update.run map {
+         (${app.name}, ${app.logo}, ${app.publicKey}, ${app.placements}, $clientId)""".update.run map {
+      case 0 => false
+      case _ => true
+    }
+
+  def deleteApp(appId: Long): ConnectionIO[Boolean] =
+    sql"""delete from apps
+         where id = $appId""".update.run map {
       case 0 => false
       case _ => true
     }
 
   def initializeApp(app: CreateAppRequest, clientId: Long): ConnectionIO[AppOut] = {
     val (privateKey, pubKey) = KeypairService.generateKeypair().getEncoded
-    val appIn = AppIn(app.name, app.description, app.logo, pubKey)
+    val appIn = AppIn(app.name, app.description, app.logo, app.placements, pubKey)
     createApp(appIn, clientId).map(bool => {
       AppOut(app.name, app.description, app.logo, pubKey, privateKey)
     })

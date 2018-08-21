@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Formik, FormikValues } from 'formik';
+import { Formik, FormikValues, FormikProps, FormikConfig } from 'formik';
 import { fromRenderProp, withPromise, ChainableComponent } from 'chainable-components';
 import axios from 'axios';
 import withLoading from '../util/Loadable';
 import { List, Icon, Row, Col, Input, Button, Form } from 'antd';
 
-const chainableFormik = fromRenderProp(Formik);
+const chainableFormik = (props: FormikConfig<FormikValues>) => fromRenderProp(Formik as any, props);
 
 export type FormValue = {
   name: string,
@@ -49,12 +49,10 @@ export default (config: EntityFormConfig) => {
 function getEntity(config: EntityFormConfig): ChainableComponent<FormikValues> {
   const opts = { headers: { Authorization: config.auth } };
   if (config.edit) {
-    return withPromise({
-      get: () => axios.get(`${config.baseUrl}/${config.id}`, opts).then(resp => {
+    return withPromise(() => axios.get(`${config.baseUrl}/${config.id}`, opts).then(resp => {
         return resp.data;
       })
-    })
-      .chain(withLoading)
+    ).chain(withLoading)
   } else {
     const initialValues = config.values.reduce((acc, i) => ({
       ...acc,
@@ -75,7 +73,7 @@ const formItemLayout = {
   },
 };
 
-export const GenericForm = ([formik, config]) => (
+export const GenericForm = ([formik, config]: [FormikProps<any>, EntityFormConfig]) => (
   <form onSubmit={formik.handleSubmit} style={{ marginTop: '3rem' }}>
     <Row gutter={16}>
       <Col className='gutter-row' span={16} offset={3}>

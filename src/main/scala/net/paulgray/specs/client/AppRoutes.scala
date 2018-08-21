@@ -1,43 +1,19 @@
 package net.paulgray.specs.client
 
-import java.security.KeyFactory
-import java.security.interfaces.{RSAPrivateKey, RSAPublicKey}
-import java.security.spec.PKCS8EncodedKeySpec
-
 import cats.data.OptionT
 import cats.effect.IO
-import com.auth0.jwt.JWT
-import com.auth0.jwt.algorithms.Algorithm
-import com.auth0.jwt.interfaces.RSAKeyProvider
 import doobie.implicits._
-import io.circe.Encoder
+import io.circe.generic.auto._
+import io.jsonwebtoken.SignatureAlgorithm
 import net.paulgray.specs.ApiRouter.ApiRoot
 import net.paulgray.specs.RequestUtil.{ConnectionIOOps, DbResultResponse, withClient, withClientAndBody}
 import net.paulgray.specs.SpecsRoot.RequestHandler
-import net.paulgray.specs.course.ActivityQueries.{Activity, UpdateActivityRequest}
-import org.http4s.{EntityDecoder, EntityEncoder}
+import net.paulgray.specs.client.AppQueries.{AppOut, CreateAppRequest}
+import net.paulgray.specs.core.KeyQueries._
+import net.paulgray.specs.core.LaunchService.LaunchAppRequest
+import net.paulgray.specs.core.{KeyQueries, LaunchService}
 import org.http4s.circe._
 import org.http4s.dsl.io._
-import io.circe.syntax._
-import io.circe._
-import io.circe._
-import io.circe.generic.semiauto._
-import io.circe.literal._
-import io.circe.generic.auto._
-import io.circe.java8.time.encodeInstant
-import net.paulgray.specs.RequestUtil
-import net.paulgray.specs.client.AppQueries.{AppOut, CreateAppRequest}
-import net.paulgray.specs.core.{KeyQueries, KeypairService, LaunchService}
-import net.paulgray.specs.core.LaunchService.LaunchAppRequest
-import org.apache.commons.codec.binary.Base64
-import java.security.PublicKey
-import java.security.spec.EncodedKeySpec
-import java.security.spec.X509EncodedKeySpec
-import javax.xml.crypto.dsig.SignatureMethod
-
-import KeyQueries._
-import LaunchAppRequest._
-import io.jsonwebtoken.SignatureAlgorithm
 
 object AppRoutes {
 
@@ -77,6 +53,26 @@ object AppRoutes {
           for {
             app <- getApp(appId, client.id)
           } yield app
+      }
+
+    // put
+    case req @ PUT -> ApiRoot / "apps" / LongVar(appId) =>
+      withClientAndBody[App, CreateAppRequest](req) {
+        (client, body) =>
+          for {
+            app <- getApp(appId, client.id)
+            updated <- updateApp(appId, body)
+          } yield app
+      }
+
+    // delete
+    case req @ DELETE -> ApiRoot / "apps" / LongVar(appId) =>
+      withClient[Boolean](req) {
+        client =>
+          for {
+            app <- getApp(appId, client.id)
+            updated <- deleteApp(appId)
+          } yield updated
       }
 
     // create
@@ -127,5 +123,11 @@ object AppRoutes {
 
   def getApps(clientId: Long): DbResultResponse[List[App]] =
     AppQueries.getApps(clientId).toRightResp
+
+  def updateApp(appId: Long, app: CreateAppRequest): DbResultResponse[Int] =
+    AppQueries.updateApp(app, appId).toRightResp
+
+  def deleteApp(appId: Long): DbResultResponse[Boolean] =
+    AppQueries.deleteApp(appId).toRightResp
 
 }

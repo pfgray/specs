@@ -28,16 +28,50 @@ export type Enrollment = {
   role: string
 };
 
+export type Course = {
+  id: number,
+  name: string,
+  groupType: string,
+  label: string,
+  organization: string
+};
+
+export type CourseInfo = {
+  course: Course,
+  aggregates: {
+    activityCount: number,
+    enrollmentCount: number
+  }
+};
+
 export function getUsersNotInCourse(organizationId: Id, courseId: Id, token: string): Promise<User[]> {
   return axios.get(`/api/organizations/${organizationId}/courses/${courseId}/usersNotInCourse`, {
     headers: { Authorization: token }
   }).then(resp => resp.data as User[]);
 }
 
+export function getUsers(organizationId: Id, token: string): Promise<User[]> {
+  return axios.get(`/api/organizations/${organizationId}/users`, {
+    headers: { Authorization: token }
+  }).then(resp => resp.data.users as User[]);
+}
+
 export function getEnrollments(organizationId: Id, courseId: Id, token: string): Promise<EnrollmentInfo[]> {
   return axios.get(`/api/organizations/${organizationId}/courses/${courseId}/enrollments`, {
     headers: { Authorization: token }
   }).then(resp => resp.data as EnrollmentInfo[]);
+}
+
+export function getCourse(organizationId: Id, courseId: Id, token: string): Promise<Course> {
+  return axios.get(`/api/organizations/${organizationId}/courses/${courseId}`, {
+    headers: { Authorization: token }
+  }).then(resp => resp.data as Course);
+}
+
+export function getCourses(organizationId: Id, token: string): Promise<CourseInfo[]> {
+  return axios.get(`/api/organizations/${organizationId}/courses`, {
+    headers: { Authorization: token }
+  }).then(resp => resp.data.courses as CourseInfo[]);
 }
 
 export type Placement = { launchType: string, url: string, name: string, customParameters: { [key: string]: string } }
@@ -125,11 +159,51 @@ export function getApp(token: string, appId: number | string): Promise<App> {
   });
 }
 
+export function createApp(app: App, token: string): Promise<App> {
+  return axios.post(`/api/apps`, app, {
+    headers: { Authorization: token }
+  }).then(resp => {return resp.data});
+}
+
+export function updateApp(id: Id, app: App, token: string): Promise<App> {
+  return axios.put(`/api/apps/${id}`, app, {
+    headers: { Authorization: token }
+  }).then(resp => {return resp.data});
+}
+
+export function deleteApp(id: Id, token: string): Promise<boolean> {
+  return axios.delete(`/api/apps/${id}`, {
+    headers: { Authorization: token }
+  }).then(resp => {return resp.data});
+}
+
 type LaunchToken = {
   idToken: string
 };
 
-export function getLaunchToken(token: string, launchAppRequest: any): Promise<LaunchToken> {
+export type LaunchForm = {
+  messageType: string,
+  url: string,
+  deploymentId: string,
+  full_name: string,
+  given_name: string,
+  family_name: string,
+  guid: string,
+  email: string,
+  roles: string,
+  picture: string
+  middle_name: string,
+  label: string,
+  context_id: string,
+  context_label: string,
+  context_title: string,
+  context_type: string[],
+  resource_link_title: string,
+  resource_link_description: string,
+  resource_link_id: string,
+};
+
+export function getLaunchToken(token: string, launchAppRequest: LaunchForm): Promise<LaunchToken> {
   return axios.post(`/api/apps/launch`, launchAppRequest, {
     headers: { Authorization: token }
   }).then(resp => {

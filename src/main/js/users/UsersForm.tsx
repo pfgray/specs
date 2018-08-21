@@ -19,7 +19,7 @@ const withRoute = fromRenderProp(Route);
 const OrganizationForm = () =>
   withAuth
     .chain(token =>
-      withRoute({}).chain(route =>
+      withRoute.chain(route =>
         entityForm({
           auth: token,
           edit: route.location.pathname.indexOf('edit') !== -1,
@@ -61,6 +61,6 @@ const OrganizationForm = () =>
         })
       )
     )
-    .ap(GenericForm);
+    .render(GenericForm);
 
 export default OrganizationForm;
