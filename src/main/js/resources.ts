@@ -123,6 +123,7 @@ export type App = {
   description: string,
   logo?: string,
   publicKey?: string,
+  privateKey?: string,
   placements: { placements: Placement[] }
 };
 

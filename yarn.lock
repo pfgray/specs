@@ -877,6 +877,10 @@
   version "1.0.29"
   resolved "https://registry.yarnpkg.com/@types/lscache/-/lscache-1.0.29.tgz#068a8acca8668c0a2b5d5dcb2800fa334c7b1f60"
 
+"@types/ramda@^0.25.36":
+  version "0.25.36"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.25.36.tgz#1ddaf3211c7cd7046fcaefe68c713469ccfc9504"
+
 "@types/react-router-dom@^4.2.6":
   version "4.2.7"
   resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-4.2.7.tgz#9d36bfe175f916dd8d7b6b0237feed6cce376b4c"
@@ -3668,10 +3672,6 @@ lodash@^4.0.0, lodash@^4.16.5, lodash@^4.17.10, lodash@^4.17.2, lodash@^4.17.3, 
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
-lodash@~4.0.0:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.0.1.tgz#cd8c902c9e03f2e69ce3e0e456d505ab89eb98f4"
-
 longest@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/longest/-/longest-1.0.1.tgz#30a0b2da38f73770e8294a0d22e6625ed77d0097"
@@ -4787,6 +4787,10 @@ rafl@~1.2.1:
   resolved "https://registry.yarnpkg.com/rafl/-/rafl-1.2.2.tgz#fe930f758211020d47e38815f5196a8be4150740"
   dependencies:
     global "~4.3.0"
+
+ramda@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
 
 randomatic@^3.0.0:
   version "3.0.0"

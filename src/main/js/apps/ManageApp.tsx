@@ -1,4 +1,4 @@
-import { Button, Col, Input, Row, Select, Icon } from 'antd';
+import { Button, Col, Input, Row, Select, Icon, Modal } from 'antd';
 import { ChainableComponent, fromRenderProp, withState } from 'chainable-components';
 import { WithStateContext } from 'chainable-components/lib/lib/withState';
 import * as React from 'react';
@@ -33,16 +33,40 @@ const newPlacement = (state: WithStateContext<App>) => () => {
   });
 }
 
+type ReviewState = { reviewing: false, app: null } | { reviewing: true, app: App };
+
 function isAdd(route: RouteComponentProps<any>) {
   return route.location.pathname.indexOf('register') !== -1;
 }
 
-function submitApp(appId: null | string, submitting: WithStateContext<boolean>, route: RouteComponentProps<any, any>, app: App, token: string): Promise<any> {
+function submitApp(appId: null | string, reviewing: WithStateContext<ReviewState>, submitting: WithStateContext<boolean>, route: RouteComponentProps<any, any>, app: App, token: string): Promise<any> {
   submitting.update(true);
   delete app.publicKey;
   const promise = appId ? updateApp(appId, app, token) : createApp(app, token);
-  promise.then(() => {
-    route.history.goBack();
+  promise.then((resp) => {
+    if (!appId) {
+      console.log('got: ', resp);
+      // this is a new app, so let's review it
+      Modal.info({
+        title: 'Security Credentials',
+        content: (
+          <div>
+            <p>These are the credentials you'll use to access <i>Specs.</i> Apis</p>
+            <p>Make sure to copy them now. You won't be able to see the private key again.</p>
+
+            <h4>Public Key:</h4>
+            <pre className='public-key'>{resp.publicKey}</pre>
+            <h4>Private Key:</h4>
+            <pre className='private-key'>{resp.privateKey}</pre>
+          </div>
+        ),
+        style: {width: '50rem'},
+        onOk() { route.history.goBack() },
+      });
+      // reviewing.update({ reviewing: true, app: resp });
+    } else {
+      route.history.goBack();
+    }
   });
 }
 
@@ -63,11 +87,25 @@ const ManageApp = () =>
     },
     ([, initialApp]) => withState(initialApp),
     () => withState(false),
-    (submitting, app, [appId,], route, token) => ({ app, appId, submitting, route, token })
-  ).render(({ route, app, appId, submitting, token }) => {
+    () => withState({ reviewing: false, app: null } as ReviewState),
+    (reviewing, submitting, app, [appId,], route, token) => ({ app, appId, submitting, route, token, reviewing })
+  ).render(({ route, app, appId, submitting, token, reviewing }) => {
     const updateField = updateFieldCreator(app);
     return (
       <Row style={{ marginTop: '2rem' }}>
+        <Modal
+          title={'Security Credentials'}
+          visible={reviewing.value.reviewing}
+          onOk={_ => route.history.goBack()}>
+          {reviewing.value.reviewing ? (
+            <div>
+              <h4>Public Key:</h4>
+              <pre className='public-key'>{reviewing.value.app.publicKey}</pre>
+              <h4>Private Key:</h4>
+              <pre className='private-key'>{reviewing.value.app.privateKey}</pre>
+            </div>
+          ) : null}
+        </Modal>
         <Col sm={{ span: 16, offset: 4 }} xs={{ span: 22, offset: 1 }}>
           <div className='app-metadata'>
             <AppLogo app={app.value} style={{ height: '72px', width: '72px' }} />
@@ -83,9 +121,8 @@ const ManageApp = () =>
             <PlacementEditor p={p} app={app} i={i} />
           ))}
           <div style={{ marginTop: '1rem' }}>
-            <Button type="primary" loading={false} onClick={() => submitApp(appId, submitting, route, app.value, token)}>Save</Button>
+            <Button type="primary" loading={submitting.value} onClick={() => submitApp(appId, reviewing, submitting, route, app.value, token)}>Save</Button>
           </div>
-          <Icon type="delete" style={{ fontSize: 16, color: '#ff4d4f', marginLeft: '1rem' }} onClick={() => removePlacement(props.app, props.i)} />
         </Col>
       </Row>
     );

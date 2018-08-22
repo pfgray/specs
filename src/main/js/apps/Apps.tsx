@@ -14,7 +14,7 @@ const withRoute = fromRenderProp(Route);
 function removeApp(appId: Id, token: string, route: RouteComponentProps<any, any>) {
   deleteApp(appId as number, token).then(() => {
     window.location.reload();
-  })
+  });
 }
 
 const Apps = () =>
