@@ -51,6 +51,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % "0.9.3",
   "io.circe" %% "circe-generic-extras" % "0.9.3",
 
+  "com.typesafe" % "config" % "1.3.2",
+
   "org.apache.httpcomponents" % "httpclient" % "4.5.3",
   "commons-io" % "commons-io" % "2.5",
 
@@ -89,4 +91,18 @@ lazy val yarnBuild = taskKey[Seq[File]]("yarnBuild") := {
   Seq.empty[File]
 }
 
+//lazy val yarnCompile = taskKey[Seq[File]]("yarnCompile")
+//yarnCompile := {
+//  val wut = Process("yarn compile", cwd = baseDirectory.value).!
+//  val assetDir = (targetDirectory in Compile).value / "assets"
+//  assetDir.listFiles().toSeq
+//}
+
+mainClass in assembly := Some("net.paulgray.specs.SpecsServer")
+
+//packagedArtifact in Compile += Def.task {
+//  Process("yarn compile", cwd = baseDirectory.value).!
+//  val assetDir = (resourceManaged in Compile).value / "assets"
+//  assetDir.listFiles().toSeq
+//}.taskValue
 

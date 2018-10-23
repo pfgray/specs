@@ -69,14 +69,15 @@
     "typescript": "^2.9.0",
     "url-loader": "^0.5.8",
     "webpack": "^2.6.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "yargs": "^12.0.1"
   },
   "engines": {
     "node": ">=0.10.0"
   },
   "scripts": {
     "build": "webpack",
-    "compile": "tsc",
+    "compile": "webpack -p --config webpack.config.prod.js",
     "test": "exit 1"
   }
 }

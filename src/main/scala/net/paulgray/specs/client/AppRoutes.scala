@@ -4,10 +4,12 @@ import cats.data.OptionT
 import cats.effect.IO
 import doobie.implicits._
 import io.circe.generic.auto._
+import io.circe.Encoder
+import io.circe.syntax._
 import io.jsonwebtoken.SignatureAlgorithm
 import net.paulgray.specs.ApiRouter.ApiRoot
 import net.paulgray.specs.RequestUtil.{ConnectionIOOps, DbResultResponse, withClient, withClientAndBody}
-import net.paulgray.specs.SpecsRoot.RequestHandler
+import net.paulgray.specs.SpecsRoot.{RequestHandler, xa}
 import net.paulgray.specs.client.AppQueries.{AppOut, CreateAppRequest}
 import net.paulgray.specs.core.KeyQueries._
 import net.paulgray.specs.core.LaunchService.LaunchAppRequest
@@ -86,12 +88,15 @@ object AppRoutes {
 
     // launch
     case req @ POST -> ApiRoot / "apps" / "launch" =>
-      withClientAndBody[IdTokenResponse, LaunchAppRequest](req) {
-        (client, req) =>
-          for {
-            idToken <- generateLaunch(req)
-          } yield IdTokenResponse(idToken)
+      val resp = for {
+        launchReq <- req.as[LaunchAppRequest]
+        idToken   <- generateLaunch(launchReq).value.transact(xa)
+      } yield idToken match {
+        case Left(resp) => resp
+        case Right(idToken) =>
+          Ok(IdTokenResponse(idToken).asJson)
       }
+      resp.flatMap(identity)
   }
 
   def generateLaunch(lar: LaunchAppRequest): DbResultResponse[String] = {

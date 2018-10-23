@@ -20,7 +20,7 @@ import OrganizationLayout from './OrganizationLayout.tsx';
 const LayoutOut = ({ children }) => (
   <div>
     <Switch>
-      <Route path="/(|organizations/new|organizations/edit/*|apps|apps/register|launch|apps/*/manage)" component={SpecsLayout} />
+      <Route path="/(|organizations|organizations/new|organizations/edit/*|apps|apps/register|launch|apps/*/manage)" component={SpecsLayout} />
       <Route path="/organizations/:orgId/*" component={OrganizationLayout} />
     </Switch>
   </div>

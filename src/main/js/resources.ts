@@ -204,10 +204,8 @@ export type LaunchForm = {
   resource_link_id: string,
 };
 
-export function getLaunchToken(token: string, launchAppRequest: LaunchForm): Promise<LaunchToken> {
-  return axios.post(`/api/apps/launch`, launchAppRequest, {
-    headers: { Authorization: token }
-  }).then(resp => {
+export function getLaunchToken(launchAppRequest: LaunchForm): Promise<LaunchToken> {
+  return axios.post(`/api/apps/launch`, launchAppRequest).then(resp => {
     console.log('got token back: ', resp.data);
     return resp.data as LaunchToken;
   });

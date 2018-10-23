@@ -19,7 +19,7 @@ object SpecsServer extends StreamApp[IO] {
   override def stream(args: List[String], requestShutdown: IO[Unit]): Stream[IO, ExitCode] = {
     init()
     BlazeBuilder[IO]
-      .bindHttp(8080, "localhost")
+      .bindHttp(8080, "0.0.0.0")
       .mountService(SpecsRoot.service, "/")
       .mountService(ProviderController.service, "/lti")
       .serve
@@ -30,32 +30,35 @@ object SpecsServer extends StreamApp[IO] {
 
     val init = Fragment.const(Source.fromResource("init.sql").getLines().mkString("\n"))
 
+    println(s"====Initializing: \n\n$init")
+
+    init.updateWithLogHandler(LogHandler.jdkLogHandler).run.transact(xa).unsafeRunSync()
+
     val keypair = KeypairService.generateKeypair()
-    println(
-      s"""
-         |Private Key: ${keypair.getPrivate.getAlgorithm} ~> ${keypair.getPrivate.getFormat}
-         |  Bytes:
-         |${new String(keypair.getPrivate.getEncoded)}
-         |Base64 encoded:
-         |${Base64.encodeBase64String(keypair.getPrivate.getEncoded)}
-         |Reverse reverse:
-         |${new String(Base64.decodeBase64(Base64.encodeBase64String(keypair.getPrivate.getEncoded)))}
-         |
-         |
-         |{Public Key: ${keypair.getPublic.getAlgorithm} ~> ${keypair.getPublic.getFormat}
-         |  Bytes:
-         |${new String(keypair.getPublic.getEncoded)}
-         |Base64 encoded:
-         |${Base64.encodeBase64String(keypair.getPublic.getEncoded)}
-         |Reverse reverse:
-         |${new String(Base64.decodeBase64(Base64.encodeBase64String(keypair.getPublic.getEncoded)))}
-       """.stripMargin)
+//    println(
+//      s"""
+//         |Private Key: ${keypair.getPrivate.getAlgorithm} ~> ${keypair.getPrivate.getFormat}
+//         |  Bytes:
+//         |${new String(keypair.getPrivate.getEncoded)}
+//         |Base64 encoded:
+//         |${Base64.encodeBase64String(keypair.getPrivate.getEncoded)}
+//         |Reverse reverse:
+//         |${new String(Base64.decodeBase64(Base64.encodeBase64String(keypair.getPrivate.getEncoded)))}
+//         |
+//         |
+//         |{Public Key: ${keypair.getPublic.getAlgorithm} ~> ${keypair.getPublic.getFormat}
+//         |  Bytes:
+//         |${new String(keypair.getPublic.getEncoded)}
+//         |Base64 encoded:
+//         |${Base64.encodeBase64String(keypair.getPublic.getEncoded)}
+//         |Reverse reverse:
+//         |${new String(Base64.decodeBase64(Base64.encodeBase64String(keypair.getPublic.getEncoded)))}
+//       """.stripMargin)
     val (privateKey, publicKey) = keypair.getEncoded
     val addKey = KeyQueries.createKeypair(privateKey, publicKey)
 
     addKey.transact(xa).unsafeRunSync()
 
-    init.updateWithLogHandler(LogHandler.jdkLogHandler).run.transact(xa).unsafeRunSync()
   }
 
 }

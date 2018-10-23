@@ -1,4 +1,4 @@
-import Lockr from 'Lockr';
+import Lockr from 'lockr';
 export const LAUNCH_IN_FRAME = 'LAUNCH_IN_FRAME';
 export const UNLAUNCH = 'UNLAUNCH';
 export const OPEN_PREVIOUS = 'OPEN_PREVIOUS';

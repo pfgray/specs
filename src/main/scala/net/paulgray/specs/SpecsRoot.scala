@@ -11,11 +11,13 @@ import net.paulgray.specs.RequestOps._
 
 object SpecsRoot {
 
+  val db = SpecsConfigLoader.getConfig.db
+
   val xa = Transactor.fromDriverManager[IO](
     "org.postgresql.Driver", // driver classname
-    "jdbc:postgresql://localhost:5436/specs", // connect URL (driver-specific)
-    "myuser",               // user
-    "mypass"                // password
+    db.jdbc, // connect URL (driver-specific)
+    db.user,               // user
+    db.pass                // password
   )
 
   type IOResp = IO[Response[IO]]

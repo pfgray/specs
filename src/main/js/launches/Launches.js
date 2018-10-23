@@ -7,7 +7,7 @@ import _ from 'lodash';
 import History from 'material-ui-icons/History';
 import Launch from 'material-ui-icons/Launch';
 import CallMade from 'material-ui-icons/CallMade';
-import Lockr from 'Lockr';
+import Lockr from 'lockr';
 
 import PrevLaunches from './PrevLaunches';
 import users from './users/users';

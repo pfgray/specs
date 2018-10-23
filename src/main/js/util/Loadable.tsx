@@ -15,7 +15,9 @@ type LoadableData<T> = {
 };
 
 export function Loadable<A>(props: LoadableProps<A>): React.ReactNode {
-  return props.loading ? <Icon type="loading" /> : props.children(props.data);
+  return props.loading ? (
+    <div className='loading-container'><Icon type='loading' /></div>
+  ) : props.children(props.data);
 };
 
 export function withLoadablePromise<A>(config: () => Promise<A>): ChainableComponent<A> {

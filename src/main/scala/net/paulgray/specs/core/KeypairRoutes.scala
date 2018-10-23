@@ -38,7 +38,6 @@ object KeypairRoutes {
 
       val jwk = new RSAKey.Builder(publicKey.asInstanceOf[RSAPublicKey]).keyID(keypair.id.toString).build()
 
-
       jwk
 
       // Builder(keyPair.getPublic.asInstanceOf[RSAPublicKey]).privateKey(keyPair.getPrivate.asInstanceOf[RSAPrivateKey]).keyID(UUID.randomUUID.toString).build // Give the key some ID (optional)

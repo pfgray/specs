@@ -36,7 +36,7 @@ const OrganizationLayout = () =>
       withLoadablePromise(() => getOrganization(route.match.params.orgId, token)).map(org => [org, route])
     )
   ).render(([org, route]) => (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ maxHeight: '100vh' }}>
       <Sider collapsible style={{ background: '#fff' }}>
         <h1 className='logo' style={{ padding: '1rem' }}>{org.name}</h1>
         <Menu theme="light" mode="inline" activeKey={matchPath(route.location.pathname)} selectedKeys={[matchPath(route.location.pathname)]} >

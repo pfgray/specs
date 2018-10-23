@@ -1,5 +1,5 @@
-import React from 'react';
-import {connect} from 'react-redux';
+import * as React from 'react';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { compose, withState } from 'recompose';
 import reformed from 'react-reformed';
@@ -7,7 +7,7 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd';
 const FormItem = Form.Item;
 import { Row, Col } from 'antd';
 import axios from 'axios';
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import lscache from 'lscache';
 
 const update = setProperty => e => {
@@ -27,10 +27,10 @@ const submit = (model, setSubmitting, history) => e => {
     });
 }
 
-const Login = ({model, setProperty, onSubmit, submitting, setSubmitting, history}) => (
+const Login = ({ model, setProperty, onSubmit, submitting, setSubmitting, history }) => (
   <div className="login-page">
     <Row>
-      <Col sm={{span: 8, offset: 8}} xs={{span: 22, offset: 1}}>
+      <Col sm={{ span: 8, offset: 8 }} xs={{ span: 22, offset: 1 }}>
         <h1>Specs</h1>
         <Form onSubmit={submit(model, setSubmitting, history)}>
           <FormItem>
@@ -44,18 +44,18 @@ const Login = ({model, setProperty, onSubmit, submitting, setSubmitting, history
           </Button>
 
           <FormItem>
-            <div>New to here? <a href="/signup">Sign up.</a></div>
+            <div>New to here? <Link to='/signup'><Icon type={'mail'} style={{ marginLeft: 8, marginRight: 4 }} />Sign up</Link></div>
           </FormItem>
         </Form>
       </Col>
-      </Row>
+    </Row>
   </div>
 );
 
 export default compose(
   connect(
     state => ({}),
-    d => ({dispatch: d})
+    d => ({ dispatch: d })
   ),
   reformed(),
   withState('submitting', 'setSubmitting', false),

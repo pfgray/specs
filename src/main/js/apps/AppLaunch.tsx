@@ -48,8 +48,9 @@ const changeAll = (change, obj) => {
   });
 }
 
-const updateToken = debounce((tokenState: any, newFormState: any, token: string) => {
-  getLaunchToken(token, newFormState).then(resp => {
+const updateToken = debounce((tokenState: any, newFormState: any) => {
+  console.log('wuuut', newFormState);
+  getLaunchToken(newFormState).then(resp => {
     tokenState.update({
       idToken: resp.idToken,
       dirty: false
@@ -57,15 +58,15 @@ const updateToken = debounce((tokenState: any, newFormState: any, token: string)
   });
 }, 500);
 
-const refreshToken = (tokenState: any, token: string) => (newFormState: any) => {
+const refreshToken = (tokenState: any) => (newFormState: any) => {
   tokenState.update({
     ...tokenState.value,
     dirty: true
   });
-  updateToken(tokenState, newFormState, token);
+  updateToken(tokenState, newFormState);
 }
 
-const updateField = (tokenState: any, token: string) => (formState: any, field: string) => (e: any) => {
+const updateField = (tokenState: any) => (formState: any, field: string) => (e: any) => {
   // set the token state to loading...
   // and when we recieve set it back
   const newFormState = {
@@ -73,7 +74,7 @@ const updateField = (tokenState: any, token: string) => (formState: any, field: 
     [field]: e.target ? e.target.value : e
   };
   if(field !== 'url') {
-      refreshToken(tokenState, token)(newFormState);
+    refreshToken(tokenState)(newFormState);
   }
   formState.update(newFormState);
 };
@@ -85,8 +86,7 @@ const DefaultContext = Contexts[0];
 
 const AppLaunch = () =>
   ChainableComponent.Do(
-    withAuth,
-    () => withRoute,
+    withRoute,
     () => withState<LaunchForm>({
       messageType: MessageTypes[0],
       url: 'http://localhost:9001/launch.php',
@@ -98,17 +98,17 @@ const AppLaunch = () =>
       resource_link_title: '',
       resource_link_description: ''
     }),
-    (formState, _, token) => withLoadablePromise(() => getLaunchToken(token, formState.value)),
+    (formState, _) => withLoadablePromise(() => getLaunchToken(formState.value)),
     (initialToken) => withState({ dirty: false, idToken: initialToken.idToken }),
-    (tokenState, _, formState, route, token) => ({route, token, formState, tokenState})
-  ).render(({token, formState, tokenState}) => (
+    (tokenState, _, formState, route) => ({route, formState, tokenState})
+  ).render(({formState, tokenState}) => (
     <Row className='launch-form' style={{ marginTop: '2rem' }}>
       {/* <pre>{JSON.stringify(formState, null, 2)}</pre> */}
       <Col sm={{ span: 22, offset: 1 }}>
           <Row>
             {/* Launch */}
             <Col sm={{ span: 12 }} style={{ paddingRight: '0.5rem' }}>
-              <LaunchToolForm formState={formState} updateField={updateField(tokenState, token)} messageTypes={MessageTypes} refreshToken={refreshToken(tokenState, token)}/>
+              <LaunchToolForm formState={formState} updateField={updateField(tokenState)} messageTypes={MessageTypes} refreshToken={refreshToken(tokenState)}/>
             </Col>
             {/* Resource */}
             <Col sm={{ span: 12 }} style={{ paddingLeft: '0.5rem' }}>
@@ -118,11 +118,11 @@ const AppLaunch = () =>
           <Row>
             {/* User */}
             <Col sm={{ span: 12 }} style={{ paddingRight: '0.5rem' }}>
-              <LaunchUserForm formState={formState} updateField={updateField(tokenState, token)}  refreshToken={refreshToken(tokenState, token)}/>
+              <LaunchUserForm formState={formState} updateField={updateField(tokenState)}  refreshToken={refreshToken(tokenState)}/>
             </Col>
             {/* Context */}
             <Col sm={{ span: 12 }} style={{ paddingLeft: '0.5rem' }}>
-              <LaunchContextForm formState={formState} updateField={updateField(tokenState, token)} contextTypes={ContextTypes}  refreshToken={refreshToken(tokenState, token)}/>
+              <LaunchContextForm formState={formState} updateField={updateField(tokenState)} contextTypes={ContextTypes}  refreshToken={refreshToken(tokenState)}/>
             </Col>
           </Row>
 
@@ -137,7 +137,6 @@ const AppLaunch = () =>
             </Col>
           </Row>
           {/* <Entry name="custom" type="textarea" label="custom" type="textarea" /> */}
-
       </Col>
     </Row>
   ));
