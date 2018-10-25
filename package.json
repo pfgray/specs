@@ -57,6 +57,7 @@
     "@babel/preset-react": "^7.0.0-beta.44",
     "@babel/preset-stage-1": "^7.0.0-beta.44",
     "@babel/preset-typescript": "^7.0.0-beta.44",
+    "babel-plugin-monadic-do": "^0.0.1",
     "bootstrap-loader": "^2.1.0",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^2.1.2",

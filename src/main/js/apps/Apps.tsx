@@ -18,18 +18,13 @@ function removeApp(appId: Id, token: string, route: RouteComponentProps<any, any
 }
 
 const Apps = () =>
-  ChainableComponent.Do(
-    withAuth,
-    () => withRoute,
-    (_, token) => withLoadablePromise(() => getApps(token)),
-    () => withState({ deleting: false, app: null } as { deleting: false, app: null } | { deleting: true, app: App }),
-    (deleting, apps, route, token) => ({
-      apps: apps.apps,
-      route,
-      token,
-      deleting
-    })
-  ).render(({ apps, token, deleting, route }) => (
+  (do {
+    token    << withAuth;
+    route    << withRoute;
+    apps     << withLoadablePromise(() => getApps(token));
+    deleting << withState({ deleting: false, app: null } as { deleting: false, app: null } | { deleting: true, app: App });
+    ({ apps: apps.apps, route, token, deleting });
+  }).render(({ apps, token, deleting, route }) => (
     <BreadcrumbLayout breadcrumbs={['Specs', 'Apps']}>
       <Modal
         title={'Delete App'}
